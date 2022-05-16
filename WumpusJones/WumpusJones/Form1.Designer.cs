@@ -29,13 +29,90 @@ namespace WumpusJones
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.label1 = new System.Windows.Forms.Label();
+            this.labelMessage = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.buttonExit = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.SuspendLayout();
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Showcard Gothic", 28.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label1.Location = new System.Drawing.Point(23, 18);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(389, 59);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Wumpus Jones";
+            // 
+            // labelMessage
+            // 
+            this.labelMessage.AutoSize = true;
+            this.labelMessage.Font = new System.Drawing.Font("Showcard Gothic", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point);
+            this.labelMessage.ForeColor = System.Drawing.Color.Yellow;
+            this.labelMessage.Location = new System.Drawing.Point(79, 105);
+            this.labelMessage.Name = "labelMessage";
+            this.labelMessage.Size = new System.Drawing.Size(79, 26);
+            this.labelMessage.TabIndex = 2;
+            this.labelMessage.Text = "label2";
+            // 
+            // panel1
+            // 
+            this.panel1.Location = new System.Drawing.Point(64, 149);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(700, 700);
+            this.panel1.TabIndex = 3;
+            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            // 
+            // buttonExit
+            // 
+            this.buttonExit.Location = new System.Drawing.Point(668, 12);
+            this.buttonExit.Name = "buttonExit";
+            this.buttonExit.Size = new System.Drawing.Size(96, 47);
+            this.buttonExit.TabIndex = 4;
+            this.buttonExit.Text = "Exit";
+            this.buttonExit.UseVisualStyleBackColor = true;
+            this.buttonExit.Click += new System.EventHandler(this.buttonExit_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(580, 84);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(184, 47);
+            this.button1.TabIndex = 5;
+            this.button1.Text = "Show High Scores";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // Form1
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
+            this.BackColor = System.Drawing.Color.Silver;
+            this.ClientSize = new System.Drawing.Size(839, 900);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.buttonExit);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.labelMessage);
+            this.Controls.Add(this.label1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Name = "Form1";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.Text = "Hunt the Wumpus";
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         #endregion
+
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelMessage;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button buttonExit;
+        private System.Windows.Forms.Button button1;
     }
 }
 
