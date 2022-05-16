@@ -133,12 +133,8 @@ namespace WumpusJones
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
-            // Only update if the movement is not insignificant
-            if (!mouseLocation.HasValue || Math.Sqrt(Math.Pow(mouseLocation.Value.X - e.X, 2) + Math.Pow(mouseLocation.Value.Y - e.Y, 2)) > 10)
-            {
-                pictureBox1.Invalidate();
-                mouseLocation = e.Location;
-            }
+            pictureBox1.Invalidate();
+            mouseLocation = e.Location;
         }
     }
 }
