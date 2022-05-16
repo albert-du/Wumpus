@@ -6,6 +6,6 @@ namespace WumpusJones
     {
         void AddScore(string name, int score);
         void AddScore(PlayerScore score);
-        IReadOnlyCollection<PlayerScore> Scores { get; }
+        IReadOnlyList<PlayerScore> Scores { get; }
     }
 }

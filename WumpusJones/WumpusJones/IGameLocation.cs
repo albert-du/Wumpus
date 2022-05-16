@@ -6,7 +6,7 @@ namespace WumpusJones
     {
         Room Player { get; set; }
         Room WumpusLocations { get; set; }
-        IReadOnlyCollection<Hazard> NearbyHazards { get; set; }
+        IReadOnlyList<Hazard> NearbyHazards { get; set; }
         void MovePlayer(Direction direction);
 
     }

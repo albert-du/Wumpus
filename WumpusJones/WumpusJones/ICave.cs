@@ -4,8 +4,8 @@ namespace WumpusJones
 {
     public interface ICave
     {
-        IReadOnlyCollection<Room> AllRooms { get; }
-        IReadOnlyCollection<Room> NearbyRooms { get; }
-        IReadOnlyCollection<Room> ExploredRooms { get; }
+        IReadOnlyList<Room> AllRooms { get; }
+        IReadOnlyList<Room> NearbyRooms { get; }
+        IReadOnlyList<Room> ExploredRooms { get; }
     }
 }
