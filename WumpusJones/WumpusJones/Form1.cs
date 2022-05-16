@@ -12,12 +12,31 @@ namespace WumpusJones
 {
     public partial class Form1 : Form
     {
+        const int hexSize = 120;
+
+        Point? mouseLocation = null;
+
+        readonly IReadOnlyList<Point[]> hexagons;
+
         public Form1()
         {
             InitializeComponent();
+            var dx = (int)(hexSize * 1.5);
+            var dy = (int)(Math.Sqrt(3) * hexSize / 2);
+            var center = pictureBox1.Size / 2;
+            hexagons = new[]
+            {
+                new Point(0, 0),
+                new Point(0, 2 * dy),
+                new Point(0, -2 * dy),
+                new Point(dx, dy),
+                new Point(dx, -dy),
+                new Point(-dx, dy),
+                new Point(-dx, -dy)
+            }.Select(p => RegularHexagonCoordinates(hexSize, p + center)).ToArray();
         }
 
-        #region Windowless dragging
+        #region Borderless dragging
         private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -47,45 +66,78 @@ namespace WumpusJones
         {
             var hlen = length / 2;
             var a = (int)(Math.Sqrt(3) * (float)hlen);
-            return new[] 
-            { 
-                new Point(-length, 0),
-                new Point(-hlen, a),
-                new Point(hlen, a),
-                new Point(length, 0), 
-                new Point(hlen, -a),
-                new Point(-hlen, -a),
-            }.Select(p => new Point(p.X + center.X, p.Y + center.Y)).ToArray();
+            return new[]
+            {
+                new Size(-length, 0),
+                new Size(-hlen, a),
+                new Size(hlen, a),
+                new Size(length, 0),
+                new Size(hlen, -a),
+                new Size(-hlen, -a),
+            }.Select(s => center + s).ToArray();
         }
 
-        private void panel1_Paint(object sender, PaintEventArgs e)
+        public static bool IsPointInPolygon(Point[] polygon, Point point)
         {
-            // Test implementation of drawing a minimal hexagonal grid.
-            const int size = 120;
-            var width = panel1.Width;
-            var height = panel1.Height;
+            Point p1, p2;
+            bool inside = false;
 
-            var g = e.Graphics;
-            Font font = new("Times New Roman", 40);
+            if (polygon.Length < 3) return inside;
 
-            var dx = (int)(size * 1.5);
-            var dy = (int)(Math.Sqrt(3) * size / 2);
-            DrawHex(0, 0, Color.White, "");
-            DrawHex(0, 2 * dy, Color.CornflowerBlue, "7");
-            DrawHex(0, -2 * dy, Color.CornflowerBlue, "1");
-            DrawHex(dx, dy, Color.CornflowerBlue, "2");
-            DrawHex(dx, -dy, Color.CornflowerBlue, "4");
-            DrawHex(-dx, dy, Color.CornflowerBlue, "5");
-            DrawHex(-dx, -dy, Color.CornflowerBlue, "6");
+            var oldPoint = new Point(polygon[^1].X, polygon[^1].Y);
 
-            void DrawHex(int dx, int dy, Color color, string text)
+            for (int i = 0; i < polygon.Length; i++)
             {
-                var p = new Point(width / 2 + dx, height / 2 + dy);
-                var points = RegularHexagonCoordinates(size, p);
-                g.FillPolygon(new SolidBrush(Color.Black), points);
-                points = RegularHexagonCoordinates(size - 2, p);
-                g.FillPolygon(new SolidBrush(color), points);
-                g.DrawString(text, font, Brushes.Black, p + new Size(-20, -20));
+                var newPoint = new Point(polygon[i].X, polygon[i].Y);
+                if (newPoint.X > oldPoint.X)
+                {
+                    p1 = oldPoint;
+                    p2 = newPoint;
+                }
+                else
+                {
+                    p1 = newPoint;
+                    p2 = oldPoint;
+                }
+
+                if ((newPoint.X < point.X) == (point.X <= oldPoint.X)
+                    && (point.Y - (long)p1.Y) * (p2.X - p1.X)
+                    < (p2.Y - (long)p1.Y) * (point.X - p1.X))
+                    inside = !inside;
+                oldPoint = newPoint;
+            }
+            return inside;
+        }
+
+        private void pictureBox1_Paint(object sender, PaintEventArgs e)
+        {
+            var g = e.Graphics;
+            using Font font = new("Times New Roman", 40);
+            using Pen border = new(Brushes.Black, 2);
+
+            foreach (var hex in hexagons)
+            {
+                var brush =
+                    mouseLocation.HasValue && IsPointInPolygon(hex, mouseLocation.Value)
+                    ? Brushes.SkyBlue
+                    : Brushes.CornflowerBlue;
+                g.FillPolygon(brush, hex);
+                g.DrawPolygon(border, hex);
+                g.DrawString("3", font, Brushes.Black, hex[0] + new Size(hexSize / 2 + 15, -15));
+            }
+
+            g.FillPolygon(Brushes.SkyBlue, hexagons[0]);
+            g.DrawPolygon(border, hexagons[0]);
+            g.DrawString("3", font, Brushes.Black, hexagons[0][0] + new Size(hexSize / 2 + 15, -15));
+        }
+
+        private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
+        {
+            // Only update if the movement is not insignificant
+            if (!mouseLocation.HasValue || Math.Sqrt(Math.Pow(mouseLocation.Value.X - e.X, 2) + Math.Pow(mouseLocation.Value.Y - e.Y, 2)) > 10)
+            {
+                pictureBox1.Invalidate();
+                mouseLocation = e.Location;
             }
         }
     }

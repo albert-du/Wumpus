@@ -31,9 +31,10 @@ namespace WumpusJones
         {
             this.label1 = new System.Windows.Forms.Label();
             this.labelMessage = new System.Windows.Forms.Label();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.buttonExit = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -57,14 +58,6 @@ namespace WumpusJones
             this.labelMessage.TabIndex = 2;
             this.labelMessage.Text = "label2";
             // 
-            // panel1
-            // 
-            this.panel1.Location = new System.Drawing.Point(64, 149);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(700, 700);
-            this.panel1.TabIndex = 3;
-            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
-            // 
             // buttonExit
             // 
             this.buttonExit.Location = new System.Drawing.Point(668, 12);
@@ -85,15 +78,25 @@ namespace WumpusJones
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Location = new System.Drawing.Point(69, 151);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(700, 700);
+            this.pictureBox1.TabIndex = 6;
+            this.pictureBox1.TabStop = false;
+            this.pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
+            this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Silver;
             this.ClientSize = new System.Drawing.Size(839, 900);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.buttonExit);
-            this.Controls.Add(this.panel1);
             this.Controls.Add(this.labelMessage);
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -101,6 +104,7 @@ namespace WumpusJones
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Hunt the Wumpus";
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -110,9 +114,9 @@ namespace WumpusJones
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label labelMessage;
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button buttonExit;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 
