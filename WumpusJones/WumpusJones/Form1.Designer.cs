@@ -46,6 +46,7 @@ namespace WumpusJones
             this.label1.Size = new System.Drawing.Size(389, 59);
             this.label1.TabIndex = 0;
             this.label1.Text = "Wumpus Jones";
+            this.label1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
             // 
             // labelMessage
             // 
@@ -80,6 +81,7 @@ namespace WumpusJones
             // 
             // pictureBox1
             // 
+            this.pictureBox1.BackColor = System.Drawing.Color.DarkGray;
             this.pictureBox1.Location = new System.Drawing.Point(69, 151);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(700, 700);
