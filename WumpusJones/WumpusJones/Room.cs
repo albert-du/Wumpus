@@ -2,7 +2,7 @@ namespace WumpusJones
 {
     public class Room
     {
-        public Room(int number, int[] neighbors, bool[] tunnels)
+        public Room(int number, params int[] neighbors)
         {
 
         }
