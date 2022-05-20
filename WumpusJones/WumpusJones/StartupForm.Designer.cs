@@ -101,6 +101,7 @@ namespace WumpusJones
             this.ForeColor = System.Drawing.Color.Orange;
             this.Name = "StartupForm";
             this.Text = "StartupForm";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.StartupForm_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

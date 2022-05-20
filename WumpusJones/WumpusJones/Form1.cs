@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WumpusJones
@@ -18,8 +15,11 @@ namespace WumpusJones
 
         readonly IReadOnlyList<Point[]> hexagons;
 
-        public Form1()
+        GameController _gameController;
+
+        public Form1(string playerName)
         {
+            _gameController = new(playerName);
             InitializeComponent();
             var dx = (int)(hexSize * 1.5);
             var dy = (int)(Math.Sqrt(3) * hexSize / 2);
