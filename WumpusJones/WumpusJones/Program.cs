@@ -44,8 +44,9 @@ namespace WumpusJones
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            new StartupForm().ShowDialog();
-            Application.Run(new Form1());
+            StartupForm startup = new();
+            startup.ShowDialog();
+            Application.Run(new Form1(startup.PlayerName));
         }
     }
 }

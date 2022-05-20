@@ -21,6 +21,13 @@ namespace WumpusJones
                 return;
             }
             PlayerName = textBoxName.Text;
+            Close();
+        }
+
+        private void StartupForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // If the startup is closed without a name, just close the entire application.
+            if (PlayerName is null) Application.Exit();
         }
     }
 }
