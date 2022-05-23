@@ -13,17 +13,39 @@ namespace WumpusJones
         public Room BatRoom { get; set; }
         public Room HoleRoom { get; set; }
 
-        public GameLocation(Room p, Room w, Room b, Room h)
+        Random rnd = new Random();
+        Cave cave;
+
+        public GameLocation(Cave cave)
         {
-            PlayerRoom = p;
-            WumpusRoom = w;
-            BatRoom = b;
-            HoleRoom = h;
+            this.cave = cave;
         }
         
-        public void MovePlayer(Direction direction)
+        public string MovePlayer(int room)
         {
+            var neighbors = cave.Rooms[room - 1].Neighbors;
+            string value = "";
+            foreach (var r in neighbors)
+            {
+                if (r - 1 == WumpusRoom.Number)
+                {
+                    value += "Boulder nearby\n";
+                }
+                if (r - 1 == BatRoom.Number)
+                {
+                    value += "Bat nearby\n";
+                }
+                if (r - 1 == HoleRoom.Number)
+                {
+                    value += "Hole nearby\n";
+                }
+            }
+            return value;
+        }
 
+        private void CreateHazards()
+        {
+            
         }
     }
 }
