@@ -13,13 +13,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: 5.0.x
+    - name: setup-msbuild
+      uses: microsoft/setup-msbuild@v1.1
     - name: Restore dependencies
-      run: dotnet restore ./WumpusJones/
+      run: msbuild /t:restore ./WumpusJones/
     - name: Build
-      run: dotnet build --no-restore ./WumpusJones/
-    - name: Test
-      run: dotnet test --no-build --verbosity normal ./WumpusJones/
+      run: msbuild /p:RestorePackages=false ./WumpusJones/
