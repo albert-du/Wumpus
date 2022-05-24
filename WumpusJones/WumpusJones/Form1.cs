@@ -23,7 +23,7 @@ namespace WumpusJones
             InitializeComponent();
             var dx = (int)(hexSize * 1.5);
             var dy = (int)(Math.Sqrt(3) * hexSize / 2);
-            var center = pictureBox1.Size / 2;
+            var center = new Size(pictureBox1.Size.Width / 2, pictureBox1.Size.Height / 2);
             hexagons = new[]
             {
                 new Point(0, 0),
@@ -84,7 +84,7 @@ namespace WumpusJones
 
             if (polygon.Length < 3) return inside;
 
-            var oldPoint = new Point(polygon[^1].X, polygon[^1].Y);
+            var oldPoint = new Point(polygon[polygon.Length - 1].X, polygon[polygon.Length - 1].Y);
 
             for (int i = 0; i < polygon.Length; i++)
             {

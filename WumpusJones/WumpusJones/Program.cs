@@ -41,7 +41,6 @@ namespace WumpusJones
         static void Main()
         {
             InitFont();
-            Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             StartupForm startup = new();
