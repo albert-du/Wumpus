@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace WumpusJones
 {
-    class Cave
+    public class Cave
     {
         public List<Room> Explored { get; set; } = new();
         public Room[] Rooms { get; }

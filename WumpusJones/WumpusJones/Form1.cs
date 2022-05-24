@@ -9,7 +9,7 @@ namespace WumpusJones
 {
     public partial class Form1 : Form
     {
-        const int hexSize = 120;
+        const int hexSize = 100;
 
         Point? mouseLocation = null;
 
