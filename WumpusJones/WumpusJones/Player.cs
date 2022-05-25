@@ -18,12 +18,8 @@ namespace WumpusJones
         public bool ShootArrows()
         {
             Turn();
-            if (Arrows > 0)
-            {
-                Arrows -= 1;
-                return true;
-            }
-                else return false;
+            Arrows -= 1;
+            return Arrows > 0;
         }
 
 

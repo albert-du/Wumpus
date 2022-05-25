@@ -8,10 +8,10 @@ namespace WumpusJones
 {
     class GameLocation
     {
-        public Room PlayerRoom { get; set; }
-        public Room WumpusRoom { get; set; }
-        public Room BatRoom { get; set; }
-        public Room HoleRoom { get; set; }
+        public int PlayerRoom { get; set; }
+        public int WumpusRoom { get; set; }
+        public int BatRoom { get; set; }
+        public int HoleRoom { get; set; }
 
         Random rnd = new Random();
         Cave cave;
@@ -21,21 +21,39 @@ namespace WumpusJones
             this.cave = cave;
         }
         
+        /// <summary>
+        /// Moves the boulder (wumpus) 2 caves over
+        /// </summary>
+        public void RandomizeWumpus()
+        {
+            var validMovements = cave.RoomAt(WumpusRoom).Neighbors.Where(x => x > 0).ToList();
+            int next = 0;
+            while (next == 0 || next == PlayerRoom)
+                next = validMovements.ElementAt(rnd.Next(validMovements.Count));
+            
+            validMovements = cave.RoomAt(next).Neighbors.Where(x => x > 0).ToList();
+            next = 0;
+            while (next == 0 || next == PlayerRoom)
+                next = validMovements.ElementAt(rnd.Next(validMovements.Count));
+
+            WumpusRoom = next;
+        }
+
         public string MovePlayer(int room)
         {
-            var neighbors = cave.Rooms[room - 1].Neighbors;
+            var neighbors = cave.RoomAt(room).Neighbors;
             string value = "";
             foreach (var r in neighbors)
             {
-                if (r - 1 == WumpusRoom.Number)
+                if (r == WumpusRoom)
                 {
                     value += "Boulder nearby\n";
                 }
-                if (r - 1 == BatRoom.Number)
+                if (r == BatRoom)
                 {
                     value += "Bat nearby\n";
                 }
-                if (r - 1 == HoleRoom.Number)
+                if (r == HoleRoom)
                 {
                     value += "Hole nearby\n";
                 }
