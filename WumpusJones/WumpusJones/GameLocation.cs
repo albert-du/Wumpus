@@ -10,7 +10,8 @@ namespace WumpusJones
     {
         public int PlayerRoom { get; set; }
         public int WumpusRoom { get; set; }
-        public int BatRoom { get; set; }
+        public int BatRoom1 { get; set; }
+        public int BatRoom2 { get; set; }
         public int HoleRoom { get; set; }
 
         Random rnd = new Random();
@@ -30,14 +31,14 @@ namespace WumpusJones
             int next = 0;
             while (next == 0 || next == PlayerRoom)
                 next = validMovements.ElementAt(rnd.Next(validMovements.Count));
-            
+
             validMovements = cave.RoomAt(next).Neighbors.Where(x => x > 0).ToList();
             next = 0;
             while (next == 0 || next == PlayerRoom)
                 next = validMovements.ElementAt(rnd.Next(validMovements.Count));
 
             WumpusRoom = next;
-
+        }
         public void CreateHazards()
         {
             int bat1 = rnd.Next(30) + 1;
@@ -45,10 +46,10 @@ namespace WumpusJones
             int wumpus = rnd.Next(30) + 1;
             int hole = rnd.Next(30) + 1;
 
-            WumpusRoom = cave.RoomAt(wumpus);
-            BatRoom1 = cave.RoomAt(bat1);
-            BatRoom2 = cave.RoomAt(bat2);
-            HoleRoom = cave.RoomAt(hole);
+            WumpusRoom = wumpus;
+            BatRoom1 = bat1;
+            BatRoom2 = bat2;
+            HoleRoom = hole;
         }
 
         public string MovePlayer(int room)
@@ -61,11 +62,11 @@ namespace WumpusJones
                 {
                     value += "You sense something huge nearby\n";
                 }
-                if (r == BatRoom1.Number || r == BatRoom2)
+                if (r == BatRoom1 || r == BatRoom2)
                 {
                     value += "Sounds of chittering bounce off the walls\n";
                 }
-                if (r == BatRoom1.Number && r == BatRoom2)
+                if (r == BatRoom1 && r == BatRoom2)
                 {
                     value += "Sounds are louder than usual\n";
                 }
