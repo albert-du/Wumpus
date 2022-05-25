@@ -125,6 +125,10 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <EmbeddedResource Include="Resources\Caves\Cave1.dat" />
+    <EmbeddedResource Include="Resources\Caves\Cave2.dat" />
+    <EmbeddedResource Include="Resources\Caves\Cave3.dat" />
+    <EmbeddedResource Include="Resources\Caves\Cave4.dat" />
+    <EmbeddedResource Include="Resources\Caves\Cave5.dat" />
     <None Include="Resources\Fonts\SF Fedora\SF Fedora Outline.ttf" />
     <None Include="Resources\Fonts\SF Fedora\SF Fedora Shadow.ttf" />
     <None Include="Resources\Fonts\SF Fedora\SF Fedora Symbols.ttf" />

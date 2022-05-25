@@ -20,7 +20,7 @@ namespace WumpusJones
         {
             this.cave = cave;
         }
-        
+
         /// <summary>
         /// Moves the boulder (wumpus) 2 caves over
         /// </summary>
@@ -37,6 +37,18 @@ namespace WumpusJones
                 next = validMovements.ElementAt(rnd.Next(validMovements.Count));
 
             WumpusRoom = next;
+
+        public void CreateHazards()
+        {
+            int bat1 = rnd.Next(30) + 1;
+            int bat2 = rnd.Next(30) + 1;
+            int wumpus = rnd.Next(30) + 1;
+            int hole = rnd.Next(30) + 1;
+
+            WumpusRoom = cave.RoomAt(wumpus);
+            BatRoom1 = cave.RoomAt(bat1);
+            BatRoom2 = cave.RoomAt(bat2);
+            HoleRoom = cave.RoomAt(hole);
         }
 
         public string MovePlayer(int room)
@@ -47,23 +59,22 @@ namespace WumpusJones
             {
                 if (r == WumpusRoom)
                 {
-                    value += "Boulder nearby\n";
+                    value += "You sense something huge nearby\n";
                 }
-                if (r == BatRoom)
+                if (r == BatRoom1.Number || r == BatRoom2)
                 {
-                    value += "Bat nearby\n";
+                    value += "Sounds of chittering bounce off the walls\n";
+                }
+                if (r == BatRoom1.Number && r == BatRoom2)
+                {
+                    value += "Sounds are louder than usual\n";
                 }
                 if (r == HoleRoom)
                 {
-                    value += "Hole nearby\n";
+                    value += "A draft blows through the room\n";
                 }
             }
             return value;
-        }
-
-        private void CreateHazards()
-        {
-            
         }
     }
 }
