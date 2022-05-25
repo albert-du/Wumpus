@@ -5,13 +5,16 @@ using System.Reflection;
 
 namespace WumpusJones
 {
-    class Cave
+    public class Cave
     {
-        public List<Room> Explored { get; set; } = new();
-        public Room[] Rooms { get; }
+        private Room[] rooms;
+        public List<int> Explored { get; set; } = new();
+
+        public Room RoomAt(int roomNumber) => rooms[roomNumber - 1];
+
         public Cave(int map)
         {
-            Rooms = new Room[]
+            rooms = new Room[]
             {
                 new Room(1, 25, 26, 2, 7, 6, 30),
                 new Room(2, 26, 3, 9, 8, 7, 1),
@@ -48,13 +51,10 @@ namespace WumpusJones
             var resourceName = assembly.GetManifestResourceNames().Single(x => x.EndsWith($"Cave{map}.dat"));
             using var stream = assembly.GetManifestResourceStream(resourceName);
             using StreamReader reader = new(stream);
-            foreach (var room in Rooms)
+            foreach (var room in rooms)
                 room.Parse(reader.ReadLine());
-            _ = 1;
         }
-        public void ExploredRoom(Room room)
-        {
+        public void ExploredRoom(int room) =>
             Explored.Add(room);
-        }
     }
 }

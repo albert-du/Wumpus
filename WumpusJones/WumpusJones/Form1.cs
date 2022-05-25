@@ -9,7 +9,7 @@ namespace WumpusJones
 {
     public partial class Form1 : Form
     {
-        const int hexSize = 120;
+        const int hexSize = 100;
 
         Point? mouseLocation = null;
 
@@ -19,7 +19,7 @@ namespace WumpusJones
 
         public Form1(string playerName)
         {
-            _gameController = new(playerName);
+            _gameController = new(playerName, 1, Trivia);
             InitializeComponent();
             var dx = (int)(hexSize * 1.5);
             var dy = (int)(Math.Sqrt(3) * hexSize / 2);
@@ -34,6 +34,7 @@ namespace WumpusJones
                 new Point(-dx, dy),
                 new Point(-dx, -dy)
             }.Select(p => RegularHexagonCoordinates(hexSize, p + center)).ToArray();
+            label1.Font = Program.CustomFont;
         }
 
         #region Borderless dragging
@@ -54,6 +55,16 @@ namespace WumpusJones
         static extern bool ReleaseCapture();
         #endregion
 
+        private void Trivia(string title, Action<bool> callback)
+        {
+            void handler(object _, TriviaFinishedEventArgs args)
+            {
+                triviaControl1.TriviaFinished -= handler;
+                callback(args.Correct >= 2);
+            }
+            triviaControl1.TriviaFinished += handler;
+        }
+        
         private void buttonExit_Click(object sender, EventArgs e) =>
             Application.Exit();
 

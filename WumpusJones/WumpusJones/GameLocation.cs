@@ -8,11 +8,11 @@ namespace WumpusJones
 {
     class GameLocation
     {
-        public Room PlayerRoom { get; set; }
-        public Room WumpusRoom { get; set; }
-        public Room BatRoom1 { get; set; }
-        public Room BatRoom2 { get; set; }
-        public Room HoleRoom { get; set; }
+        public int PlayerRoom { get; set; }
+        public int WumpusRoom { get; set; }
+        public int BatRoom1 { get; set; }
+        public int BatRoom2 { get; set; }
+        public int HoleRoom { get; set; }
 
         Random rnd = new Random();
         Cave cave;
@@ -22,6 +22,23 @@ namespace WumpusJones
             this.cave = cave;
         }
 
+        /// <summary>
+        /// Moves the boulder (wumpus) 2 caves over
+        /// </summary>
+        public void RandomizeWumpus()
+        {
+            var validMovements = cave.RoomAt(WumpusRoom).Neighbors.Where(x => x > 0).ToList();
+            int next = 0;
+            while (next == 0 || next == PlayerRoom)
+                next = validMovements.ElementAt(rnd.Next(validMovements.Count));
+
+            validMovements = cave.RoomAt(next).Neighbors.Where(x => x > 0).ToList();
+            next = 0;
+            while (next == 0 || next == PlayerRoom)
+                next = validMovements.ElementAt(rnd.Next(validMovements.Count));
+
+            WumpusRoom = next;
+        }
         public void CreateHazards()
         {
             int bat1 = rnd.Next(30) + 1;
@@ -29,31 +46,31 @@ namespace WumpusJones
             int wumpus = rnd.Next(30) + 1;
             int hole = rnd.Next(30) + 1;
 
-            WumpusRoom = cave.Rooms[wumpus - 1];
-            BatRoom1 = cave.Rooms[bat1 - 1];
-            BatRoom2 = cave.Rooms[bat2 - 1];
-            HoleRoom = cave.Rooms[hole - 1];
+            WumpusRoom = wumpus;
+            BatRoom1 = bat1;
+            BatRoom2 = bat2;
+            HoleRoom = hole;
         }
 
         public string MovePlayer(int room)
         {
-            var neighbors = cave.Rooms[room - 1].Neighbors;
+            var neighbors = cave.RoomAt(room).Neighbors;
             string value = "";
             foreach (var r in neighbors)
             {
-                if (r - 1 == WumpusRoom.Number)
+                if (r == WumpusRoom)
                 {
                     value += "You sense something huge nearby\n";
                 }
-                if (r - 1 == BatRoom1.Number || r - 1 == BatRoom2.Number)
+                if (r == BatRoom1 || r == BatRoom2)
                 {
                     value += "Sounds of chittering bounce off the walls\n";
                 }
-                if (r - 1 == BatRoom1.Number && r - 1 == BatRoom2.Number)
+                if (r == BatRoom1 && r == BatRoom2)
                 {
                     value += "Sounds are louder than usual\n";
                 }
-                if (r - 1 == HoleRoom.Number)
+                if (r == HoleRoom)
                 {
                     value += "A draft blows through the room\n";
                 }
