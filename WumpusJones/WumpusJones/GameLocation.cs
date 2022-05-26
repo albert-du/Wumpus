@@ -8,7 +8,7 @@ namespace WumpusJones
 {
     class GameLocation
     {
-        public int PlayerRoom { get; set; }
+        public int PlayerRoom { get; set; } = new Random().Next(1, 31);
         public int WumpusRoom { get; set; }
         public int BatRoom1 { get; set; }
         public int BatRoom2 { get; set; }
@@ -54,6 +54,7 @@ namespace WumpusJones
 
         public string MovePlayer(int room)
         {
+            PlayerRoom = room;
             var neighbors = cave.RoomAt(room).Neighbors;
             string value = "";
             foreach (var r in neighbors)

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WumpusJones
 {
-    class Player
+    public class Player
     {
 
         public int Arrows { get; set; }
