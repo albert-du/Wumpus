@@ -34,6 +34,7 @@ namespace WumpusJones
             this.buttonExit = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.buttonArrow = new System.Windows.Forms.Button();
             this.triviaControl1 = new WumpusJones.TriviaControl();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -92,8 +93,19 @@ namespace WumpusJones
             this.pictureBox1.Size = new System.Drawing.Size(700, 700);
             this.pictureBox1.TabIndex = 6;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             this.pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
             this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
+            // 
+            // buttonArrow
+            // 
+            this.buttonArrow.Location = new System.Drawing.Point(652, 757);
+            this.buttonArrow.Name = "buttonArrow";
+            this.buttonArrow.Size = new System.Drawing.Size(96, 45);
+            this.buttonArrow.TabIndex = 8;
+            this.buttonArrow.Text = "Shoot Arrow";
+            this.buttonArrow.UseVisualStyleBackColor = true;
+            this.buttonArrow.Click += new System.EventHandler(this.buttonArrow_Click);
             // 
             // triviaControl1
             // 
@@ -110,6 +122,7 @@ namespace WumpusJones
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(822, 855);
+            this.Controls.Add(this.buttonArrow);
             this.Controls.Add(this.triviaControl1);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.button1);
@@ -136,6 +149,7 @@ namespace WumpusJones
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private TriviaControl triviaControl1;
+        private System.Windows.Forms.Button buttonArrow;
     }
 }
 

@@ -1,22 +1,26 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 
 namespace WumpusJones
 {
     public class GameController
     {
-        private readonly string _name;
         private readonly GameLocation _gameLocation;
-        private readonly Player _player;
         private readonly Action<string, Action<bool>> _trivia;
+        private readonly string _name;
         private int _startingRoom;
 
         public Cave Cave { get; }
+        public Player Player { get; }
+
+        public Room PlayerLocation => Cave.RoomAt(_gameLocation.PlayerRoom);
 
         public GameController(string name, int caveNumber, Action<string, Action<bool>> trivia)
         {
+            Player = new();
             Cave = new(caveNumber);
             _gameLocation = new(Cave);
-            _player = new();
             _name = name;
             _trivia = trivia;
             _startingRoom = _gameLocation.PlayerRoom;
@@ -24,12 +28,12 @@ namespace WumpusJones
         public void Move(int room)
         {
             var output = _gameLocation.MovePlayer(room);
-            _player.Turns++;
-            _player.Coins++;
+            Player.Turns++;
+            Player.Coins++;
             
             // TODO: get a piece of trivia and output with the warnings
             TextChanged(output);
-            OnMove(this, new PlayerMoveEventArgs());
+            OnMove?.Invoke(this, new PlayerMoveEventArgs());
 
             // a minor amount of callback hell to wait for user input
             Action callback1 = () =>
@@ -39,7 +43,7 @@ namespace WumpusJones
                     // callback2
                     return;
                 }
-                if (_player.Coins-- < 0)
+                if (Player.Coins-- < 0)
                 {
                     GameEnded(false, "You die in a bottomless pit");
                     return;
@@ -52,7 +56,7 @@ namespace WumpusJones
                     }
                     _gameLocation.MovePlayer(_startingRoom);
                     TextChanged("You climb out of the bottomless pit");
-                    OnMove(this, new PlayerMoveEventArgs());
+                    OnMove?.Invoke(this, new PlayerMoveEventArgs());
                 });
             };
 
@@ -61,7 +65,7 @@ namespace WumpusJones
                 callback1();
                 return;
             }
-            if (_player.Coins-- < 0)
+            if (Player.Coins-- < 0)
             {
                 GameEnded(false, "The Boulder Crushes you.");
                 return;
@@ -83,26 +87,26 @@ namespace WumpusJones
         {
             if (room == _gameLocation.WumpusRoom)
                 GameEnded(true, "You've destroyed the Boulder");
-            else if (_player.ShootArrows())
+            else if (Player.ShootArrows())
                 GameEnded(false, "The Boulder senses your weakness and crushes you.");
         }
 
         public void BuyArrows()
         {
-            if (_player.Coins > 0)
+            if (Player.Coins > 0)
             {
-                _player.Coins--;
-                _trivia("Buy an arrow.", _ => _player.ArrowPurchase());
+                Player.Coins--;
+                _trivia("Buy an arrow.", _ => Player.ArrowPurchase());
             }
         }
 
-        public event EventHandler<TextChangeEventArgs> OnTextChanged;
-        public event EventHandler<GameEndEventArgs> OnGameEnd;
-        public event EventHandler<PlayerMoveEventArgs> OnMove;
+        public event EventHandler<TextChangeEventArgs>? OnTextChanged;
+        public event EventHandler<GameEndEventArgs>? OnGameEnd;
+        public event EventHandler<PlayerMoveEventArgs>? OnMove;
         
         private void TextChanged(string text) =>
-            OnTextChanged(this, new TextChangeEventArgs { Text = text });
+            OnTextChanged?.Invoke(this, new TextChangeEventArgs { Text = text });
         private void GameEnded(bool won, string message) =>
-            OnGameEnd(this, new GameEndEventArgs { Won = won, Message = message });
+            OnGameEnd?.Invoke(this, new GameEndEventArgs { Won = won, Message = message });
     }
 }
