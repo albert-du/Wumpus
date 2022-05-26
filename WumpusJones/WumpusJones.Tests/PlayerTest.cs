@@ -10,6 +10,9 @@ namespace WumpusJones.Tests
     {
         [TestMethod]
         public void TestShootArrows()
+        {
+            Player player = new Player();
+            player.ShootArrows();
 
             Assert.AreEqual(player.Arrows, 2);
         }
