@@ -68,7 +68,7 @@ namespace WumpusJones
                 }
                 if (r == BatRoom1 && r == BatRoom2)
                 {
-                    value += "Sounds are louder than usual\n";
+                    value += "The sounds are louder than usual\n";
                 }
                 if (r == HoleRoom)
                 {
