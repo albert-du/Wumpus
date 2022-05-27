@@ -18,4 +18,4 @@ jobs:
     - name: Restore dependencies
       run: msbuild /t:restore ./WumpusJones/
     - name: Build
-      run: msbuild /p:RestorePackages=false ./WumpusJones/
+      run: msbuild /p:RestorePackages=true ./WumpusJones/
