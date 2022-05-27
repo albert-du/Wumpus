@@ -18,9 +18,9 @@ namespace WumpusJones
 
         GameController _gameController;
 
-        public Form1(string playerName)
+        public Form1(string playerName, int cave)
         {
-            _gameController = new(playerName, 1, Trivia);
+            _gameController = new(playerName, cave, Trivia);
             InitializeComponent();
             var dx = (int)(hexSize * 1.5);
             var dy = (int)(Math.Sqrt(3) * hexSize / 2);

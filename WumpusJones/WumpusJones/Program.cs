@@ -45,7 +45,7 @@ namespace WumpusJones
             Application.SetCompatibleTextRenderingDefault(false);
             StartupForm startup = new();
             startup.ShowDialog();
-            Application.Run(new Form1(startup.PlayerName));
+            Application.Run(new Form1(startup.PlayerName, startup.Cave));
         }
     }
 }
