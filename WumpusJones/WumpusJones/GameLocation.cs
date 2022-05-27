@@ -41,10 +41,10 @@ namespace WumpusJones
         }
         public void CreateHazards()
         {
-            int bat1 = rnd.Next(30) + 1;
-            int bat2 = rnd.Next(30) + 1;
-            int wumpus = rnd.Next(30) + 1;
-            int hole = rnd.Next(30) + 1;
+            int bat1 = rnd.Next(29) + 1;
+            int bat2 = rnd.Next(29) + 1;
+            int wumpus = rnd.Next(29) + 1;
+            int hole = rnd.Next(29) + 1;
 
             WumpusRoom = wumpus;
             BatRoom1 = bat1;
