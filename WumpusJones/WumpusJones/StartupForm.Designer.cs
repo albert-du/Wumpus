@@ -34,24 +34,27 @@ namespace WumpusJones
             this.textBoxName = new System.Windows.Forms.TextBox();
             this.buttonStart = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
+            this.comboBoxCaveNumber = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(83, 41);
+            this.label1.Location = new System.Drawing.Point(62, 27);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(107, 20);
+            this.label1.Size = new System.Drawing.Size(80, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Wumpus Jones";
             // 
             // pictureBox1
             // 
             this.pictureBox1.Image = global::WumpusJones.Properties.Resource1.indiana_jones_raiders_lost_ark_1024x503;
-            this.pictureBox1.Location = new System.Drawing.Point(112, 122);
+            this.pictureBox1.Location = new System.Drawing.Point(84, 79);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(696, 339);
+            this.pictureBox1.Size = new System.Drawing.Size(522, 220);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 1;
             this.pictureBox1.TabStop = false;
@@ -60,9 +63,10 @@ namespace WumpusJones
             // 
             this.textBoxName.BackColor = System.Drawing.Color.Black;
             this.textBoxName.ForeColor = System.Drawing.Color.White;
-            this.textBoxName.Location = new System.Drawing.Point(165, 509);
+            this.textBoxName.Location = new System.Drawing.Point(124, 331);
+            this.textBoxName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.textBoxName.Name = "textBoxName";
-            this.textBoxName.Size = new System.Drawing.Size(274, 27);
+            this.textBoxName.Size = new System.Drawing.Size(206, 20);
             this.textBoxName.TabIndex = 2;
             // 
             // buttonStart
@@ -70,9 +74,10 @@ namespace WumpusJones
             this.buttonStart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.buttonStart.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.buttonStart.ForeColor = System.Drawing.Color.Black;
-            this.buttonStart.Location = new System.Drawing.Point(485, 503);
+            this.buttonStart.Location = new System.Drawing.Point(364, 327);
+            this.buttonStart.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.buttonStart.Name = "buttonStart";
-            this.buttonStart.Size = new System.Drawing.Size(181, 39);
+            this.buttonStart.Size = new System.Drawing.Size(136, 25);
             this.buttonStart.TabIndex = 3;
             this.buttonStart.Text = "Start";
             this.buttonStart.UseVisualStyleBackColor = false;
@@ -81,24 +86,42 @@ namespace WumpusJones
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(94, 512);
+            this.label2.Location = new System.Drawing.Point(70, 333);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(49, 20);
+            this.label2.Size = new System.Drawing.Size(35, 13);
             this.label2.TabIndex = 4;
             this.label2.Text = "Name";
             // 
+            // comboBoxCaveNumber
+            // 
+            this.comboBoxCaveNumber.FormattingEnabled = true;
+            this.comboBoxCaveNumber.Items.AddRange(new object[] {
+            "Cave 1",
+            "Cave 2",
+            "Cave 3",
+            "Cave 4",
+            "Cave 5"});
+            this.comboBoxCaveNumber.Location = new System.Drawing.Point(524, 330);
+            this.comboBoxCaveNumber.Name = "comboBoxCaveNumber";
+            this.comboBoxCaveNumber.Size = new System.Drawing.Size(121, 21);
+            this.comboBoxCaveNumber.TabIndex = 5;
+            this.comboBoxCaveNumber.Text = "Cave 1";
+            // 
             // StartupForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(898, 574);
+            this.ClientSize = new System.Drawing.Size(674, 373);
+            this.Controls.Add(this.comboBoxCaveNumber);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.buttonStart);
             this.Controls.Add(this.textBoxName);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label1);
             this.ForeColor = System.Drawing.Color.Orange;
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "StartupForm";
             this.Text = "StartupForm";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.StartupForm_FormClosing);
@@ -115,5 +138,6 @@ namespace WumpusJones
         private System.Windows.Forms.TextBox textBoxName;
         private System.Windows.Forms.Button buttonStart;
         private System.Windows.Forms.Label label2;
+        public System.Windows.Forms.ComboBox comboBoxCaveNumber;
     }
 }
