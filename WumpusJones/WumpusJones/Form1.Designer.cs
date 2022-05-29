@@ -30,12 +30,14 @@ namespace WumpusJones
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.labelMessage = new System.Windows.Forms.Label();
-            this.buttonExit = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.buttonArrow = new System.Windows.Forms.Button();
+            this.buttonMap = new System.Windows.Forms.Button();
+            this.labelArrows = new System.Windows.Forms.Label();
+            this.mapControl1 = new WumpusJones.MapControl();
             this.triviaControl1 = new WumpusJones.TriviaControl();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -51,31 +53,9 @@ namespace WumpusJones
             this.label1.Text = "Wumpus Jones";
             this.label1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
             // 
-            // labelMessage
-            // 
-            this.labelMessage.AutoSize = true;
-            this.labelMessage.Font = new System.Drawing.Font("Showcard Gothic", 12F, System.Drawing.FontStyle.Italic);
-            this.labelMessage.ForeColor = System.Drawing.Color.Yellow;
-            this.labelMessage.Location = new System.Drawing.Point(79, 84);
-            this.labelMessage.Name = "labelMessage";
-            this.labelMessage.Size = new System.Drawing.Size(79, 26);
-            this.labelMessage.TabIndex = 2;
-            this.labelMessage.Text = "label2";
-            // 
-            // buttonExit
-            // 
-            this.buttonExit.Location = new System.Drawing.Point(668, 10);
-            this.buttonExit.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.buttonExit.Name = "buttonExit";
-            this.buttonExit.Size = new System.Drawing.Size(96, 38);
-            this.buttonExit.TabIndex = 4;
-            this.buttonExit.Text = "Exit";
-            this.buttonExit.UseVisualStyleBackColor = true;
-            this.buttonExit.Click += new System.EventHandler(this.buttonExit_Click);
-            // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(580, 67);
+            this.button1.Location = new System.Drawing.Point(585, 36);
             this.button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(184, 38);
@@ -86,8 +66,8 @@ namespace WumpusJones
             // 
             // pictureBox1
             // 
-            this.pictureBox1.BackColor = System.Drawing.Color.DarkGray;
-            this.pictureBox1.Location = new System.Drawing.Point(69, 121);
+            this.pictureBox1.BackColor = System.Drawing.Color.Gray;
+            this.pictureBox1.Location = new System.Drawing.Point(67, 194);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(700, 700);
@@ -99,7 +79,7 @@ namespace WumpusJones
             // 
             // buttonArrow
             // 
-            this.buttonArrow.Location = new System.Drawing.Point(652, 757);
+            this.buttonArrow.Location = new System.Drawing.Point(650, 830);
             this.buttonArrow.Name = "buttonArrow";
             this.buttonArrow.Size = new System.Drawing.Size(96, 45);
             this.buttonArrow.TabIndex = 8;
@@ -107,32 +87,79 @@ namespace WumpusJones
             this.buttonArrow.UseVisualStyleBackColor = true;
             this.buttonArrow.Click += new System.EventHandler(this.buttonArrow_Click);
             // 
+            // buttonMap
+            // 
+            this.buttonMap.Location = new System.Drawing.Point(650, 204);
+            this.buttonMap.Name = "buttonMap";
+            this.buttonMap.Size = new System.Drawing.Size(85, 32);
+            this.buttonMap.TabIndex = 10;
+            this.buttonMap.Text = "Map";
+            this.buttonMap.UseVisualStyleBackColor = true;
+            this.buttonMap.Click += new System.EventHandler(this.buttonMap_Click);
+            // 
+            // labelArrows
+            // 
+            this.labelArrows.AutoSize = true;
+            this.labelArrows.BackColor = System.Drawing.Color.Gray;
+            this.labelArrows.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelArrows.Location = new System.Drawing.Point(79, 204);
+            this.labelArrows.Name = "labelArrows";
+            this.labelArrows.Size = new System.Drawing.Size(79, 23);
+            this.labelArrows.TabIndex = 12;
+            this.labelArrows.Text = "Arrows:";
+            // 
+            // mapControl1
+            // 
+            this.mapControl1.Cave = null;
+            this.mapControl1.GameLocations = null;
+            this.mapControl1.Location = new System.Drawing.Point(117, 224);
+            this.mapControl1.Name = "mapControl1";
+            this.mapControl1.Size = new System.Drawing.Size(600, 600);
+            this.mapControl1.TabIndex = 11;
+            // 
             // triviaControl1
             // 
             this.triviaControl1.BackColor = System.Drawing.SystemColors.Control;
-            this.triviaControl1.Location = new System.Drawing.Point(137, 257);
+            this.triviaControl1.Location = new System.Drawing.Point(135, 330);
             this.triviaControl1.Name = "triviaControl1";
-            this.triviaControl1.Size = new System.Drawing.Size(557, 350);
+            this.triviaControl1.Size = new System.Drawing.Size(582, 350);
             this.triviaControl1.TabIndex = 7;
             this.triviaControl1.Trivia = null;
             this.triviaControl1.Visible = false;
             // 
+            // richTextBox1
+            // 
+            this.richTextBox1.BackColor = System.Drawing.Color.Gray;
+            this.richTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.richTextBox1.ForeColor = System.Drawing.Color.Gold;
+            this.richTextBox1.Location = new System.Drawing.Point(67, 93);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.richTextBox1.ShortcutsEnabled = false;
+            this.richTextBox1.Size = new System.Drawing.Size(700, 96);
+            this.richTextBox1.TabIndex = 13;
+            this.richTextBox1.Text = "";
+            // 
             // Form1
             // 
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(822, 855);
-            this.Controls.Add(this.buttonArrow);
+            this.ClientSize = new System.Drawing.Size(817, 916);
+            this.Controls.Add(this.richTextBox1);
+            this.Controls.Add(this.mapControl1);
             this.Controls.Add(this.triviaControl1);
+            this.Controls.Add(this.labelArrows);
+            this.Controls.Add(this.buttonMap);
+            this.Controls.Add(this.buttonArrow);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.buttonExit);
-            this.Controls.Add(this.labelMessage);
             this.Controls.Add(this.label1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Form1";
-            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.ShowIcon = false;
             this.Text = "Hunt the Wumpus";
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -144,12 +171,14 @@ namespace WumpusJones
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label labelMessage;
-        private System.Windows.Forms.Button buttonExit;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private TriviaControl triviaControl1;
         private System.Windows.Forms.Button buttonArrow;
+        private System.Windows.Forms.Button buttonMap;
+        private MapControl mapControl1;
+        private System.Windows.Forms.Label labelArrows;
+        private System.Windows.Forms.RichTextBox richTextBox1;
     }
 }
 

@@ -63,6 +63,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cave.cs" />
+    <Compile Include="Controls\MapControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\MapControl.Designer.cs">
+      <DependentUpon>MapControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Direction.cs" />
     <Compile Include="EventArgs\GameEndEventArgs.cs" />
     <Compile Include="EventArgs\PlayerMoveEventArgs.cs" />
@@ -96,6 +102,9 @@
     <Compile Include="Controls\TriviaControl.Designer.cs">
       <DependentUpon>TriviaControl.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Controls\MapControl.resx">
+      <DependentUpon>MapControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

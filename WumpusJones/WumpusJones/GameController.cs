@@ -6,28 +6,26 @@ namespace WumpusJones
 {
     public class GameController
     {
-        private readonly GameLocation _gameLocation;
         private readonly Action<string, Action<bool>> _trivia;
         private readonly string _name;
-        private int _startingRoom;
 
         public Cave Cave { get; }
         public Player Player { get; }
+        public GameLocation GameLocation { get; }
 
-        public Room PlayerLocation => Cave.RoomAt(_gameLocation.PlayerRoom);
+        public Room PlayerLocation => Cave.RoomAt(GameLocation.PlayerRoom);
 
         public GameController(string name, int caveNumber, Action<string, Action<bool>> trivia)
         {
             Player = new();
             Cave = new(caveNumber);
-            _gameLocation = new(Cave);
+            GameLocation = new(Cave);
             _name = name;
             _trivia = trivia;
-            _startingRoom = _gameLocation.PlayerRoom;
         }
         public void Move(int room)
         {
-            var output = _gameLocation.MovePlayer(room);
+            var output = GameLocation.MovePlayer(room);
             Player.Turns++;
             Player.Coins++;
             
@@ -36,9 +34,9 @@ namespace WumpusJones
             OnMove?.Invoke(this, new PlayerMoveEventArgs());
 
             // a minor amount of callback hell to wait for user input
-            Action callback1 = () =>
+            void callback1()
             {
-                if (room != _gameLocation.HoleRoom)
+                if (room != GameLocation.HoleRoom)
                 {
                     // callback2
                     return;
@@ -48,19 +46,20 @@ namespace WumpusJones
                     GameEnded(false, "You die in a bottomless pit");
                     return;
                 }
-                _trivia("You're falling into a bottomless pit!", success => {
+                _trivia("You're falling into a bottomless pit!", success =>
+                {
                     if (!success)
                     {
                         GameEnded(false, "You die in the bottomless pit.");
                         return;
                     }
-                    _gameLocation.MovePlayer(_startingRoom);
+                    GameLocation.MovePlayer(GameLocation.StartingRoom);
                     TextChanged("You climb out of the bottomless pit");
                     OnMove?.Invoke(this, new PlayerMoveEventArgs());
                 });
-            };
+            }
 
-            if (room != _gameLocation.WumpusRoom)
+            if (room != GameLocation.WumpusRoom)
             {
                 callback1();
                 return;
@@ -77,7 +76,7 @@ namespace WumpusJones
                     GameEnded(false, "The Boulder Crushes you.");
                     return;
                 }
-                _gameLocation.RandomizeWumpus();
+                GameLocation.RandomizeWumpus();
                 TextChanged("The boulder rolls away");
                 callback1();
             });
@@ -85,9 +84,9 @@ namespace WumpusJones
 
         public void Shoot(int room)
         {
-            if (room == _gameLocation.WumpusRoom)
+            if (room == GameLocation.WumpusRoom)
                 GameEnded(true, "You've destroyed the Boulder");
-            else if (Player.ShootArrows())
+            else if (!Player.ShootArrows())
                 GameEnded(false, "The Boulder senses your weakness and crushes you.");
         }
 
