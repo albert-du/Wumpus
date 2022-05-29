@@ -9,8 +9,7 @@ namespace WumpusJones
     public class Player
     {
 
-        public int Arrows { get; set; }
-        public double Inventory {get;set;}
+        public int Arrows { get; set; } = 3;
         public int Turns { get; set; }
         public int Coins { get; set; }
         public double Secret { get; set; }

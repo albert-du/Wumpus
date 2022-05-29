@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WumpusJones
 {
-    class GameLocation
+    public class GameLocation
     {
         public int PlayerRoom { get; set; } = new Random().Next(1, 31);
+        public int StartingRoom { get; }
         public int WumpusRoom { get; set; }
         public int BatRoom1 { get; set; }
         public int BatRoom2 { get; set; }
@@ -20,6 +18,8 @@ namespace WumpusJones
         public GameLocation(Cave cave)
         {
             this.cave = cave;
+            cave.ExploredRoom(PlayerRoom);
+            StartingRoom = PlayerRoom;
         }
 
         /// <summary>
@@ -55,6 +55,7 @@ namespace WumpusJones
         public string MovePlayer(int room)
         {
             PlayerRoom = room;
+            cave.ExploredRoom(PlayerRoom);
             var neighbors = cave.RoomAt(room).Neighbors;
             string value = "";
             foreach (var r in neighbors)

@@ -20,7 +20,6 @@ namespace WumpusJones
 
         public Form1(string playerName, int cave)
         {
-            _gameController = new(playerName, cave, Trivia);
             InitializeComponent();
             var dx = (int)(hexSize * 1.5);
             var dy = (int)(Math.Sqrt(3) * hexSize / 2);
@@ -36,7 +35,16 @@ namespace WumpusJones
                 new Point(-dx, -dy)
             }.Select(p => RegularHexagonCoordinates(hexSize, p + center)).ToArray();
             label1.Font = Program.CustomFont;
+            mapControl1.Hide();
+
+            // Game Init
+            _gameController = new(playerName, cave, Trivia);
+            mapControl1.Cave = _gameController.Cave;
+            mapControl1.GameLocations = _gameController.GameLocation;
+            labelArrows.Text = $"Arrows: {_gameController.Player.Arrows}";
+
             _gameController.OnMove += OnMove;
+            _gameController.OnTextChanged += OnTextChanged;
         }
 
         #region Borderless dragging
@@ -75,7 +83,7 @@ namespace WumpusJones
             throw new NotImplementedException();
         }
 
-        private Point[] RegularHexagonCoordinates(int length, Point center)
+        internal static Point[] RegularHexagonCoordinates(int length, Point center)
         {
             var hlen = length / 2;
             var a = (int)(Math.Sqrt(3) * (float)hlen);
@@ -170,7 +178,11 @@ namespace WumpusJones
                 if (target > 0 && mouseLocation.HasValue && IsPointInPolygon(hex, mouseLocation.Value))
                 {
                     if (shooting)
+                    {
                         _gameController.Shoot(_gameController.PlayerLocation.Neighbors[i]);
+                        labelArrows.Text = $"Arrows: {_gameController.Player.Arrows}";
+                        buttonArrow_Click(null, null);
+                    }
                     else
                         _gameController.Move(_gameController.PlayerLocation.Neighbors[i]);
                     return;
@@ -179,9 +191,20 @@ namespace WumpusJones
             }
         }
         
+        private void buttonMap_Click(object sender, EventArgs e)
+        {
+            mapControl1.Visible = !mapControl1.Visible;
+            if (mapControl1.Visible)
+                mapControl1.Invalidate();
+        }
+        
         private void OnMove(object sender, PlayerMoveEventArgs e)
         {
             pictureBox1.Invalidate();
         }
+
+        private void OnTextChanged(object sender, TextChangeEventArgs e) =>
+            richTextBox1.AppendText(e.Text);
+
     }
 }

@@ -31,5 +31,11 @@ namespace WumpusJones
             _ => false
         };
         public override int GetHashCode() => Number;
+        public int North => Neighbors[0];
+        public int NorthEast => Neighbors[1];
+        public int SouthEast => Neighbors[2];
+        public int South => Neighbors[3];
+        public int SouthWest => Neighbors[4];
+        public int NorthWest => Neighbors[5];
     }
 }
