@@ -41,15 +41,17 @@ namespace WumpusJones
         }
         public void CreateHazards()
         {
-            int bat1 = rnd.Next(30) + 1;
-            int bat2 = rnd.Next(30) + 1;
-            int wumpus = rnd.Next(30) + 1;
-            int hole = rnd.Next(30) + 1;
-
-            WumpusRoom = wumpus;
-            BatRoom1 = bat1;
-            BatRoom2 = bat2;
-            HoleRoom = hole;
+            List<int> rooms = new() { PlayerRoom };
+            while (rooms.Count < 5)
+            {
+                var r = rnd.Next(1, 31);
+                if (!rooms.Contains(r))
+                    rooms.Add(r);
+            }
+            WumpusRoom = rooms[1];
+            BatRoom1 = rooms[2];
+            BatRoom2 = rooms[3];
+            HoleRoom = rooms[4];
         }
 
         public string MovePlayer(int room)
@@ -70,7 +72,7 @@ namespace WumpusJones
                 }
                 if (r == BatRoom1 && r == BatRoom2)
                 {
-                    value += "Sounds are louder than usual\n";
+                    value += "The sounds are louder than usual\n";
                 }
                 if (r == HoleRoom)
                 {
