@@ -7,6 +7,7 @@ namespace WumpusJones
     {
         private int ptr;
         private readonly Random rnd = new();
+
         private readonly Question[] questions =
         {
             new Question("Who is indiana jones?", "right", "wrong1", "wrong2" , "wrong3"),

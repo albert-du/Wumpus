@@ -23,6 +23,7 @@ namespace WumpusJones
             _trivia = trivia;
             _triviaSource = triviaSource;
         }
+
         public void Move(int room)
         {
             Player.Turns++;
@@ -56,7 +57,6 @@ namespace WumpusJones
                         OnMove?.Invoke(this, new PlayerMoveEventArgs());
                     });
                     return;
-
                 }
                 if (Player.Coins-- < 1)
                 {
@@ -120,11 +120,14 @@ namespace WumpusJones
         }
 
         public event EventHandler<TextChangeEventArgs>? OnTextChanged;
+
         public event EventHandler<GameEndEventArgs>? OnGameEnd;
+
         public event EventHandler<PlayerMoveEventArgs>? OnMove;
 
         private void TextChanged(string text, bool includeRoomNum = true) =>
             OnTextChanged?.Invoke(this, new TextChangeEventArgs { Text = text, IncludeRoom = includeRoomNum });
+
         private void GameEnded(bool won, string message) =>
             OnGameEnd?.Invoke(this, new GameEndEventArgs { Won = won, Message = message });
     }

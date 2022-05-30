@@ -9,6 +9,7 @@ namespace WumpusJones
         {
             InitializeComponent();
         }
+
         public string Title { set => labelTitle.Text = value; }
         public string Message { set => richTextBox1.Text = value; }
 
