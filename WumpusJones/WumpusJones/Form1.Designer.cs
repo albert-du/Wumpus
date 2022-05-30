@@ -44,6 +44,8 @@ namespace WumpusJones
             this.mapControl1 = new WumpusJones.MapControl();
             this.triviaControl1 = new WumpusJones.TriviaControl();
             this.gameEndControl1 = new WumpusJones.GameEndControl();
+            this.labelTurns = new System.Windows.Forms.Label();
+            this.labelScore = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -192,11 +194,34 @@ namespace WumpusJones
             // 
             // gameEndControl1
             // 
+            this.gameEndControl1.BackColor = System.Drawing.SystemColors.Control;
             this.gameEndControl1.Location = new System.Drawing.Point(144, 155);
             this.gameEndControl1.Name = "gameEndControl1";
             this.gameEndControl1.Size = new System.Drawing.Size(553, 618);
             this.gameEndControl1.TabIndex = 18;
             this.gameEndControl1.Visible = false;
+            // 
+            // labelTurns
+            // 
+            this.labelTurns.AutoSize = true;
+            this.labelTurns.BackColor = System.Drawing.Color.Gray;
+            this.labelTurns.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelTurns.Location = new System.Drawing.Point(79, 250);
+            this.labelTurns.Name = "labelTurns";
+            this.labelTurns.Size = new System.Drawing.Size(64, 23);
+            this.labelTurns.TabIndex = 19;
+            this.labelTurns.Text = "Turns:";
+            // 
+            // labelScore
+            // 
+            this.labelScore.AutoSize = true;
+            this.labelScore.BackColor = System.Drawing.Color.Gray;
+            this.labelScore.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelScore.Location = new System.Drawing.Point(79, 273);
+            this.labelScore.Name = "labelScore";
+            this.labelScore.Size = new System.Drawing.Size(105, 23);
+            this.labelScore.TabIndex = 20;
+            this.labelScore.Text = "TurnsScore";
             // 
             // Form1
             // 
@@ -205,10 +230,12 @@ namespace WumpusJones
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(817, 916);
-            this.Controls.Add(this.gameEndControl1);
-            this.Controls.Add(this.mapControl1);
-            this.Controls.Add(this.pictureBoxImage);
             this.Controls.Add(this.triviaControl1);
+            this.Controls.Add(this.pictureBoxImage);
+            this.Controls.Add(this.mapControl1);
+            this.Controls.Add(this.gameEndControl1);
+            this.Controls.Add(this.labelScore);
+            this.Controls.Add(this.labelTurns);
             this.Controls.Add(this.buttonBuySecret);
             this.Controls.Add(this.buttonBuyArrows);
             this.Controls.Add(this.labelCoins);
@@ -250,6 +277,8 @@ namespace WumpusJones
         private System.Windows.Forms.Button buttonBuyArrows;
         private System.Windows.Forms.Button buttonBuySecret;
         private GameEndControl gameEndControl1;
+        private System.Windows.Forms.Label labelTurns;
+        private System.Windows.Forms.Label labelScore;
     }
 }
 

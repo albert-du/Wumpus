@@ -62,6 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActiveWumpus.cs" />
     <Compile Include="Cave.cs" />
     <Compile Include="Controls\GameEndControl.cs">
       <SubType>UserControl</SubType>

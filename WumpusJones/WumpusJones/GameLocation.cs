@@ -6,40 +6,44 @@ namespace WumpusJones
 {
     public class GameLocation
     {
-        public int PlayerRoom { get; set; } = new Random().Next(1, 31);
+        public int PlayerRoom { get; set; }
         public int StartingRoom { get; }
-        public int WumpusRoom { get; set; }
+        public int WumpusRoom 
+        { 
+            get => wumpus.Room;
+            set => wumpus.Room = value; 
+        }
         public int BatRoom1 { get; set; }
         public int BatRoom2 { get; set; }
         public int HoleRoom { get; set; }
 
+        private ActiveWumpus wumpus;
         private Random rnd = new Random();
         private Cave cave;
 
         public GameLocation(Cave cave)
         {
             this.cave = cave;
+            wumpus = new(cave);
+            PlayerRoom = rnd.Next(1, 31);
             StartingRoom = PlayerRoom;
             CreateHazards();
         }
 
-        /// <summary>
-        /// Moves the boulder (wumpus) 2 caves over
-        /// </summary>
-        public void RandomizeWumpus()
+        public void MoveWumpus()
         {
             var validMovements = cave.RoomAt(WumpusRoom).Neighbors.Where(x => x > 0).ToList();
             int next = 0;
             while (next == 0 || next == PlayerRoom)
                 next = validMovements.ElementAt(rnd.Next(validMovements.Count));
-
-            validMovements = cave.RoomAt(next).Neighbors.Where(x => x > 0).ToList();
-            next = 0;
-            while (next == 0 || next == PlayerRoom)
-                next = validMovements.ElementAt(rnd.Next(validMovements.Count));
-
             WumpusRoom = next;
         }
+
+        public void TriviaLost() =>
+            wumpus.LostTrivia();
+
+        public void WumpusTurn() =>
+            wumpus.Turn();
 
         public bool IsWumpusNearby =>
             cave.RoomAt(WumpusRoom).Neighbors

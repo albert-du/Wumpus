@@ -26,7 +26,7 @@ namespace WumpusJones
             _questionCount = questionCount;
             results.Clear();
             labelTitle.Text = title;
-            labelCompletion.Text = "[ ] [ ] [ ]";
+            labelCompletion.Text = string.Join(" ", Enumerable.Repeat("[ ]", questionCount));
             LoadQuestion();
             Show();
         }
@@ -58,10 +58,11 @@ namespace WumpusJones
             else
                 results.Add(false);
 
-            var s1 = results.Count >= 1 ? (results[0] ? '✅' : '❎') : ' ';
-            var s2 = results.Count >= 2 ? (results[1] ? '✅' : '❎') : ' ';
-            var s3 = results.Count >= 3 ? (results[2] ? '✅' : '❎') : ' ';
-            labelCompletion.Text = $"[{s1}] [{s2}] [{s3}]";
+
+            var r = results.Select(x => x ? "[✅]" : "[❎]")
+                           .Concat(Enumerable.Repeat("[ ]", _questionCount - results.Count));
+
+            labelCompletion.Text = string.Join(" ", r);
 
             buttonA.Enabled = false;
             buttonB.Enabled = false;
