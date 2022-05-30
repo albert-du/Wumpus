@@ -24,7 +24,7 @@ namespace WumpusJones
 
         public void ArrowPurchase()
         {
-            Arrows+=2;
+            Arrows += 2;
             Turn();
         }
         public void SecretPurchase()

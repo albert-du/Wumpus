@@ -37,12 +37,13 @@ namespace WumpusJones
             this.labelArrows = new System.Windows.Forms.Label();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.labelCoins = new System.Windows.Forms.Label();
-            this.mapControl1 = new WumpusJones.MapControl();
-            this.triviaControl1 = new WumpusJones.TriviaControl();
             this.pictureBoxImage = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.buttonBuyArrows = new System.Windows.Forms.Button();
             this.buttonBuySecret = new System.Windows.Forms.Button();
+            this.mapControl1 = new WumpusJones.MapControl();
+            this.triviaControl1 = new WumpusJones.TriviaControl();
+            this.gameEndControl1 = new WumpusJones.GameEndControl();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -125,25 +126,6 @@ namespace WumpusJones
             this.labelCoins.TabIndex = 14;
             this.labelCoins.Text = "Arrows:";
             // 
-            // mapControl1
-            // 
-            this.mapControl1.Cave = null;
-            this.mapControl1.GameLocations = null;
-            this.mapControl1.Location = new System.Drawing.Point(117, 224);
-            this.mapControl1.Name = "mapControl1";
-            this.mapControl1.Size = new System.Drawing.Size(600, 600);
-            this.mapControl1.TabIndex = 11;
-            // 
-            // triviaControl1
-            // 
-            this.triviaControl1.BackColor = System.Drawing.SystemColors.Control;
-            this.triviaControl1.Location = new System.Drawing.Point(144, 475);
-            this.triviaControl1.Name = "triviaControl1";
-            this.triviaControl1.Size = new System.Drawing.Size(550, 359);
-            this.triviaControl1.TabIndex = 7;
-            this.triviaControl1.Trivia = null;
-            this.triviaControl1.Visible = false;
-            // 
             // pictureBoxImage
             // 
             this.pictureBoxImage.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxImage.Image")));
@@ -188,6 +170,34 @@ namespace WumpusJones
             this.buttonBuySecret.UseVisualStyleBackColor = true;
             this.buttonBuySecret.Click += new System.EventHandler(this.buttonBuySecret_Click);
             // 
+            // mapControl1
+            // 
+            this.mapControl1.Cave = null;
+            this.mapControl1.GameLocations = null;
+            this.mapControl1.Location = new System.Drawing.Point(117, 224);
+            this.mapControl1.Name = "mapControl1";
+            this.mapControl1.Size = new System.Drawing.Size(600, 600);
+            this.mapControl1.TabIndex = 11;
+            this.mapControl1.Visible = false;
+            // 
+            // triviaControl1
+            // 
+            this.triviaControl1.BackColor = System.Drawing.SystemColors.Control;
+            this.triviaControl1.Location = new System.Drawing.Point(144, 475);
+            this.triviaControl1.Name = "triviaControl1";
+            this.triviaControl1.Size = new System.Drawing.Size(550, 359);
+            this.triviaControl1.TabIndex = 7;
+            this.triviaControl1.Trivia = null;
+            this.triviaControl1.Visible = false;
+            // 
+            // gameEndControl1
+            // 
+            this.gameEndControl1.Location = new System.Drawing.Point(144, 155);
+            this.gameEndControl1.Name = "gameEndControl1";
+            this.gameEndControl1.Size = new System.Drawing.Size(553, 618);
+            this.gameEndControl1.TabIndex = 18;
+            this.gameEndControl1.Visible = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -195,6 +205,7 @@ namespace WumpusJones
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(817, 916);
+            this.Controls.Add(this.gameEndControl1);
             this.Controls.Add(this.mapControl1);
             this.Controls.Add(this.pictureBoxImage);
             this.Controls.Add(this.triviaControl1);
@@ -238,6 +249,7 @@ namespace WumpusJones
         private System.Windows.Forms.PictureBox pictureBoxImage;
         private System.Windows.Forms.Button buttonBuyArrows;
         private System.Windows.Forms.Button buttonBuySecret;
+        private GameEndControl gameEndControl1;
     }
 }
 

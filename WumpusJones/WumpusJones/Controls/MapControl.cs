@@ -51,7 +51,7 @@ namespace WumpusJones
 
                 for (var i = 0; i < layer; i++)
                 {
-                // south
+                    // south
                     room = Math.Abs(Cave.RoomAt(room).South);
                     UpdateBrush();
                     DrawHex(0, 2 * dy);
