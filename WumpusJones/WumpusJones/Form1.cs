@@ -9,18 +9,19 @@ namespace WumpusJones
 {
     public partial class Form1 : Form
     {
-        bool shooting;
-        bool triviaActive;
-        bool gameEnded;
-        const int hexSize = 100;
+        private bool shooting;
+        private bool triviaActive;
+        private bool gameEnded;
+        private const int hexSize = 100;
 
-        Point? mouseLocation = null;
+        private Point? mouseLocation = null;
 
-        readonly IReadOnlyList<Point[]> hexagons;
+        private readonly IReadOnlyList<Point[]> hexagons;
 
-        readonly Trivia _trivaSource;
-        readonly GameController _gameController;
-        readonly Random rnd = new();
+        private readonly Trivia _trivaSource;
+        private readonly GameController _gameController;
+        private readonly Random rnd = new();
+
         public Form1(string playerName, int cave)
         {
             InitializeComponent();
@@ -63,6 +64,7 @@ namespace WumpusJones
         }
 
         #region Borderless dragging
+
         private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -71,14 +73,17 @@ namespace WumpusJones
                 _ = SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
             }
         }
-        const int WM_NCLBUTTONDOWN = 0xA1;
-        const int HT_CAPTION = 0x2;
+
+        private const int WM_NCLBUTTONDOWN = 0xA1;
+        private const int HT_CAPTION = 0x2;
 
         [System.Runtime.InteropServices.DllImport("user32.dll")]
-        static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+        private static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+
         [System.Runtime.InteropServices.DllImport("user32.dll")]
-        static extern bool ReleaseCapture();
-        #endregion
+        private static extern bool ReleaseCapture();
+
+        #endregion Borderless dragging
 
         private void Trivia(string title, TriviaType type, Action<bool> callback)
         {
@@ -107,7 +112,6 @@ namespace WumpusJones
 
         private void buttonExit_Click(object sender, EventArgs e) =>
             Application.Exit();
-
 
         internal static Point[] RegularHexagonCoordinates(int length, Point center)
         {
@@ -282,7 +286,6 @@ namespace WumpusJones
 
         private void buttonHighScores_Click(object sender, EventArgs e)
         {
-
         }
     }
 }

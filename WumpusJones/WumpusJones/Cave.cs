@@ -54,6 +54,7 @@ namespace WumpusJones
             foreach (var room in rooms)
                 room.Parse(reader.ReadLine());
         }
+
         public void ExploredRoom(int room) =>
             Explored.Add(room);
     }

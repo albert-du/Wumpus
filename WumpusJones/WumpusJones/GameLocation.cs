@@ -13,8 +13,8 @@ namespace WumpusJones
         public int BatRoom2 { get; set; }
         public int HoleRoom { get; set; }
 
-        Random rnd = new Random();
-        Cave cave;
+        private Random rnd = new Random();
+        private Cave cave;
 
         public GameLocation(Cave cave)
         {

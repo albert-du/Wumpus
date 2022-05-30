@@ -4,6 +4,7 @@ namespace WumpusJones
     {
         public string Text { get; }
         public string[] Answers { get; }
+
         public Question(string question, string answer1, string answer2, string answer3, string answer4)
         {
             Text = question;

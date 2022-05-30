@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WumpusJones
+﻿namespace WumpusJones
 {
     public class Player
     {
@@ -13,7 +7,8 @@ namespace WumpusJones
         public int Coins { get; set; } = 5;
         public double Secret { get; set; }
 
-        int totalCoins;
+        private int totalCoins;
+
         public bool ShootArrows()
         {
             Turn();
@@ -21,17 +16,17 @@ namespace WumpusJones
             return Arrows > 0;
         }
 
-
         public void ArrowPurchase()
         {
             Arrows += 2;
             Turn();
         }
+
         public void SecretPurchase()
         {
-
             Turn();
         }
+
         private void Turn()
         {
             Turns++;
