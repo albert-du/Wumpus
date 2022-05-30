@@ -8,12 +8,12 @@ namespace WumpusJones
 {
     public class Player
     {
-
         public int Arrows { get; set; } = 3;
         public int Turns { get; set; }
-        public int Coins { get; set; }
+        public int Coins { get; set; } = 5;
         public double Secret { get; set; }
 
+        int totalCoins;
         public bool ShootArrows()
         {
             Turn();
@@ -24,8 +24,7 @@ namespace WumpusJones
 
         public void ArrowPurchase()
         {
-
-            Arrows++;
+            Arrows+=2;
             Turn();
         }
         public void SecretPurchase()
@@ -38,13 +37,10 @@ namespace WumpusJones
             Turns++;
         }
 
-        public void NoArrows()
+        public void IncrementCoin()
         {
-
+            if (totalCoins++ < 100)
+                Coins++;
         }
-
-        //public 
-
-
     }
 }

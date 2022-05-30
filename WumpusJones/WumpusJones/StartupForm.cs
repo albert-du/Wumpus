@@ -12,8 +12,8 @@ namespace WumpusJones
         }
 
         public string PlayerName { get; private set; }
-        public int Cave { get; private set; }
-
+        public int Cave =>
+            comboBoxCaveNumber.SelectedIndex + 1;
 
         private void buttonStart_Click(object sender, EventArgs e)
         {
@@ -23,7 +23,6 @@ namespace WumpusJones
                 return;
             }
             PlayerName = textBoxName.Text;
-            Cave = comboBoxCaveNumber.SelectedIndex + 1;
             Close();
         }
 

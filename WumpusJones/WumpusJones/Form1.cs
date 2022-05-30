@@ -10,14 +10,16 @@ namespace WumpusJones
     public partial class Form1 : Form
     {
         bool shooting;
+        bool triviaActive;
         const int hexSize = 100;
-
+        
         Point? mouseLocation = null;
 
         readonly IReadOnlyList<Point[]> hexagons;
 
-        GameController _gameController;
-
+        readonly Trivia _trivaSource;
+        readonly GameController _gameController;
+        readonly Random rnd = new();
         public Form1(string playerName, int cave)
         {
             InitializeComponent();
@@ -38,13 +40,17 @@ namespace WumpusJones
             mapControl1.Hide();
 
             // Game Init
-            _gameController = new(playerName, cave, Trivia);
+            _trivaSource = new();
+            _gameController = new(playerName, cave, Trivia, _trivaSource);
+            triviaControl1.Trivia = _trivaSource;
             mapControl1.Cave = _gameController.Cave;
             mapControl1.GameLocations = _gameController.GameLocation;
             labelArrows.Text = $"Arrows: {_gameController.Player.Arrows}";
+            labelCoins.Text = $"Coins: {_gameController.Player.Coins}";
 
             _gameController.OnMove += OnMove;
             _gameController.OnTextChanged += OnTextChanged;
+            OnTextChanged(this, new TextChangeEventArgs { Text = _gameController.GameLocation.MovePlayer(_gameController.GameLocation.PlayerRoom) });
         }
 
         #region Borderless dragging
@@ -65,23 +71,34 @@ namespace WumpusJones
         static extern bool ReleaseCapture();
         #endregion
 
-        private void Trivia(string title, Action<bool> callback)
+        private void Trivia(string title, TriviaType type, Action<bool> callback)
         {
+            triviaActive = true;
+            if (type is not TriviaType.Arrows and not TriviaType.Secret)
+            {
+                pictureBoxImage.Image = type switch
+                { 
+                    TriviaType.Boulder => Properties.Resources.boulder,
+                    TriviaType.Snakes => Properties.Resources.indiana_jones_snakes,
+                    _ => Properties.Resources.bottomlesspit
+                };
+                pictureBoxImage.Show();
+            }
+            triviaControl1.Init(title, 3);
             void handler(object _, TriviaFinishedEventArgs args)
             {
+                triviaActive = false;
+                pictureBoxImage.Hide();
                 triviaControl1.TriviaFinished -= handler;
                 callback(args.Correct >= 2);
             }
             triviaControl1.TriviaFinished += handler;
+            triviaControl1.Show();
         }
         
         private void buttonExit_Click(object sender, EventArgs e) =>
             Application.Exit();
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
 
         internal static Point[] RegularHexagonCoordinates(int length, Point center)
         {
@@ -140,10 +157,15 @@ namespace WumpusJones
             
             foreach (var hex in hexagons.Skip(1))
             {
-                var brush = Brushes.CornflowerBlue;
-                if (neighbors[i] < 0)
-                    brush = Brushes.DarkGray;
-                else if (mouseLocation.HasValue && IsPointInPolygon(hex, mouseLocation.Value))
+                var room = Math.Abs(neighbors[i]);
+                var brush = neighbors.Any(x => Math.Abs(x) == room) && neighbors.First(x => Math.Abs(x) == room) > 0
+                        ? (_gameController.Cave.Explored.Contains(room)
+                           ? Brushes.CadetBlue
+                           : Brushes.CornflowerBlue)
+                        : (_gameController.Cave.Explored.Contains(room)
+                           ? Brushes.PowderBlue
+                           : Brushes.DarkGray);
+                if (neighbors[i] > 0 && mouseLocation.HasValue && IsPointInPolygon(hex, mouseLocation.Value))
                     brush = shooting ? Brushes.Red : Brushes.SkyBlue;
                 g.FillPolygon(brush, hex);
                 g.DrawPolygon(border, hex);
@@ -170,6 +192,7 @@ namespace WumpusJones
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
+            if (triviaActive) return;
             // Figure out click location
             var i = 0;
             foreach (var hex in hexagons.Skip(1))
@@ -200,11 +223,57 @@ namespace WumpusJones
         
         private void OnMove(object sender, PlayerMoveEventArgs e)
         {
+            labelCoins.Text = $"Coins: {_gameController.Player.Coins}";
             pictureBox1.Invalidate();
         }
+        
+        private void OnTextChanged(object sender, TextChangeEventArgs e)
+        {
+            if (string.IsNullOrEmpty(e.Text)) return;
+            var lines = e.Text.Split('\n').Where(x => !string.IsNullOrWhiteSpace(x));
+            var num = _gameController.GameLocation.PlayerRoom;
+            foreach (var line in lines)
+                richTextBox1.AppendText(e.IncludeRoom ? $"{num}: {line}\n" : $"{line}\n");
+            richTextBox1.ScrollToCaret();
+        }
 
-        private void OnTextChanged(object sender, TextChangeEventArgs e) =>
-            richTextBox1.AppendText(e.Text);
+        private string GetSecret() => rnd.Next(6) switch
+        {
+            0 => $"Snakes at {(rnd.Next(2) == 0 ? _gameController.GameLocation.BatRoom1 : _gameController.GameLocation.BatRoom2)}",
+            1 => $"Pit at {_gameController.GameLocation.HoleRoom}",
+            2 => $"Boulder at {_gameController.GameLocation.WumpusRoom}",
+            3 => $"Wumpus is {(_gameController.GameLocation.IsWumpusNearby ? string.Empty : "not")} nearby",
+            4 => $"You're at {_gameController.GameLocation.PlayerRoom}", 
+            _ => $"{_trivaSource.GetAlreadyAskedQuestion()}"
+        };
 
+        private void buttonBuySecret_Click(object sender, EventArgs e)
+        {
+            if (_gameController.Player.Coins < 1) return;
+            _gameController.Player.Coins--;
+            Trivia("Buying a secret", TriviaType.Secret, success =>
+            {
+                OnTextChanged(this, new TextChangeEventArgs { IncludeRoom = false, Text = success ? $"SECRET: {GetSecret()}" : "No secret" });
+                _gameController.Player.SecretPurchase();
+                labelCoins.Text = $"Coins: {_gameController.Player.Coins}";
+            });
+        }
+
+        private void buttonBuyArrows_Click(object sender, EventArgs e)
+        {
+            if (_gameController.Player.Coins < 1) return;
+            _gameController.Player.Coins--;
+            Trivia("Buying arrows", TriviaType.Arrows, success =>
+            {
+                if (success) _gameController.Player.ArrowPurchase();
+                labelArrows.Text = $"Arrows: {_gameController.Player.Arrows}";
+                labelCoins.Text = $"Coins: {_gameController.Player.Coins}";
+            });
+        }
+
+        private void buttonHighScores_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

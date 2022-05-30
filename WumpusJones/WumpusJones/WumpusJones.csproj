@@ -69,7 +69,7 @@
     <Compile Include="Controls\MapControl.Designer.cs">
       <DependentUpon>MapControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Direction.cs" />
+    <Compile Include="TriviaType.cs" />
     <Compile Include="EventArgs\GameEndEventArgs.cs" />
     <Compile Include="EventArgs\PlayerMoveEventArgs.cs" />
     <Compile Include="EventArgs\TextChangeEventArgs.cs" />
@@ -82,7 +82,6 @@
     </Compile>
     <Compile Include="GameController.cs" />
     <Compile Include="GameLocation.cs" />
-    <Compile Include="HazardType.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -116,6 +115,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="Properties\Resource1.resx" />
     <EmbeddedResource Include="StartupForm.resx">
@@ -165,7 +165,10 @@
   <ItemGroup>
     <Content Include="Resources\Fonts\SF Fedora\Readme.txt" />
     <Content Include="Resources\Fonts\SF Fedora\SF Fedora Sample.jpg" />
+    <None Include="Resources\Images\bottomlesspit.jpg" />
+    <None Include="Resources\Images\boulder.gif" />
     <Content Include="Resources\Images\indiana-jones-raiders-lost-ark-1024x503.jpg" />
+    <None Include="Resources\Images\indiana-jones-snakes.gif" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

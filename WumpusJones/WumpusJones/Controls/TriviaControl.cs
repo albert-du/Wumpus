@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -7,13 +9,12 @@ namespace WumpusJones
 {
     public partial class TriviaControl : UserControl
     {
-        public Trivia Trivia { get; set; }
         private readonly Random _rnd = new();
         private string _correctAnswer;
         private int _questionCount;
-        private int _correctlyAnswered;
-        private int _incorrectlyAnswered;
+        readonly List<bool> results = new();
 
+        public Trivia Trivia { get; set; }
         public TriviaControl()
         {
             InitializeComponent();
@@ -23,9 +24,9 @@ namespace WumpusJones
         public void Init(string title, int questionCount)
         {
             _questionCount = questionCount;
-            _correctlyAnswered = 0;
-            _incorrectlyAnswered = 0;
+            results.Clear();
             labelTitle.Text = title;
+            labelCompletion.Text = "[ ] [ ] [ ]";
             LoadQuestion();
             Show();
         }
@@ -35,40 +36,68 @@ namespace WumpusJones
         private void LoadQuestion()
         {
             var question = Trivia.GetQuestion();
+            labelQuestion.Text = question.Text;
             _correctAnswer = question.Answers[0];
             var shuffled = question.Answers.OrderBy(_ => _rnd.Next()).ToArray();
             buttonA.Text = shuffled[0];
             buttonB.Text = shuffled[1];
             buttonC.Text = shuffled[2];
             buttonD.Text = shuffled[3];
+            buttonA.BackColor = SystemColors.Control;
+            buttonB.BackColor = SystemColors.Control;
+            buttonC.BackColor = SystemColors.Control;
+            buttonD.BackColor = SystemColors.Control;
         }
 
-        private void CheckAnswer(string answer)
+        private bool CheckAnswer(string answer)
         {
-            if (answer == _correctAnswer)
-                _correctlyAnswered++;
+            buttonNext.Enabled = true;
+            var c = answer == _correctAnswer;
+            if (c)
+                results.Add(true);
             else
-                _incorrectlyAnswered++;
+                results.Add(false);
 
-            if (_correctlyAnswered + _incorrectlyAnswered < _questionCount)
+            var s1 = results.Count >= 1 ? (results[0] ? '✅' : '❎') : ' ';
+            var s2 = results.Count >= 2 ? (results[1] ? '✅' : '❎') : ' ';
+            var s3 = results.Count >= 3 ? (results[2] ? '✅' : '❎') : ' ';
+            labelCompletion.Text = $"[{s1}] [{s2}] [{s3}]";
+
+            buttonA.Enabled = false;
+            buttonB.Enabled = false;
+            buttonC.Enabled = false;
+            buttonD.Enabled = false;
+
+            return c;
+        }
+
+        private void buttonA_Click(object sender, EventArgs e) =>
+            buttonA.BackColor = CheckAnswer(buttonA.Text) ? Color.Green : Color.Red;
+
+        private void buttonB_Click(object sender, EventArgs e) =>
+            buttonB.BackColor = CheckAnswer(buttonB.Text) ? Color.Green : Color.Red;
+
+        private void buttonC_Click(object sender, EventArgs e) =>
+            buttonC.BackColor = CheckAnswer(buttonC.Text) ? Color.Green : Color.Red;
+
+        private void buttonD_Click(object sender, EventArgs e) =>
+            buttonD.BackColor = CheckAnswer(buttonD.Text) ? Color.Green : Color.Red;
+
+        private void buttonNext_Click(object sender, EventArgs e)
+        {
+            buttonA.Enabled = true;
+            buttonB.Enabled = true;
+            buttonC.Enabled = true;
+            buttonD.Enabled = true;
+
+            buttonNext.Enabled = false;
+            if (results.Count < _questionCount)
                 LoadQuestion();
             else
             {
                 Hide();
-                TriviaFinished.Invoke(this, new TriviaFinishedEventArgs { Correct = _correctlyAnswered, Incorrect = _incorrectlyAnswered });
+                TriviaFinished.Invoke(this, new TriviaFinishedEventArgs { Correct = results.Where(x => x).Count(), Incorrect = results.Where(x => !x).Count() });
             }
         }
-
-        private void buttonA_Click(object sender, EventArgs e) =>
-            CheckAnswer(buttonA.Text);
-
-        private void buttonB_Click(object sender, EventArgs e) =>
-            CheckAnswer(buttonB.Text);
-
-        private void buttonC_Click(object sender, EventArgs e) =>
-            CheckAnswer(buttonC.Text);
-
-        private void buttonD_Click(object sender, EventArgs e) =>
-            CheckAnswer(buttonD.Text);
     }
 }

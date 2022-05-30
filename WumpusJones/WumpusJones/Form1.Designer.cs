@@ -29,15 +29,21 @@ namespace WumpusJones
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.label1 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.buttonHighScores = new System.Windows.Forms.Button();
             this.buttonArrow = new System.Windows.Forms.Button();
             this.buttonMap = new System.Windows.Forms.Button();
             this.labelArrows = new System.Windows.Forms.Label();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.labelCoins = new System.Windows.Forms.Label();
             this.mapControl1 = new WumpusJones.MapControl();
             this.triviaControl1 = new WumpusJones.TriviaControl();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.pictureBoxImage = new System.Windows.Forms.PictureBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.buttonBuyArrows = new System.Windows.Forms.Button();
+            this.buttonBuySecret = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -53,29 +59,16 @@ namespace WumpusJones
             this.label1.Text = "Wumpus Jones";
             this.label1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
             // 
-            // button1
+            // buttonHighScores
             // 
-            this.button1.Location = new System.Drawing.Point(585, 36);
-            this.button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(184, 38);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "Show High Scores";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.BackColor = System.Drawing.Color.Gray;
-            this.pictureBox1.Location = new System.Drawing.Point(67, 194);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(700, 700);
-            this.pictureBox1.TabIndex = 6;
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
-            this.pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
-            this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
+            this.buttonHighScores.Location = new System.Drawing.Point(585, 36);
+            this.buttonHighScores.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonHighScores.Name = "buttonHighScores";
+            this.buttonHighScores.Size = new System.Drawing.Size(184, 38);
+            this.buttonHighScores.TabIndex = 5;
+            this.buttonHighScores.Text = "Show High Scores";
+            this.buttonHighScores.UseVisualStyleBackColor = true;
+            this.buttonHighScores.Click += new System.EventHandler(this.buttonHighScores_Click);
             // 
             // buttonArrow
             // 
@@ -108,25 +101,6 @@ namespace WumpusJones
             this.labelArrows.TabIndex = 12;
             this.labelArrows.Text = "Arrows:";
             // 
-            // mapControl1
-            // 
-            this.mapControl1.Cave = null;
-            this.mapControl1.GameLocations = null;
-            this.mapControl1.Location = new System.Drawing.Point(117, 224);
-            this.mapControl1.Name = "mapControl1";
-            this.mapControl1.Size = new System.Drawing.Size(600, 600);
-            this.mapControl1.TabIndex = 11;
-            // 
-            // triviaControl1
-            // 
-            this.triviaControl1.BackColor = System.Drawing.SystemColors.Control;
-            this.triviaControl1.Location = new System.Drawing.Point(135, 330);
-            this.triviaControl1.Name = "triviaControl1";
-            this.triviaControl1.Size = new System.Drawing.Size(582, 350);
-            this.triviaControl1.TabIndex = 7;
-            this.triviaControl1.Trivia = null;
-            this.triviaControl1.Visible = false;
-            // 
             // richTextBox1
             // 
             this.richTextBox1.BackColor = System.Drawing.Color.Gray;
@@ -140,6 +114,80 @@ namespace WumpusJones
             this.richTextBox1.TabIndex = 13;
             this.richTextBox1.Text = "";
             // 
+            // labelCoins
+            // 
+            this.labelCoins.AutoSize = true;
+            this.labelCoins.BackColor = System.Drawing.Color.Gray;
+            this.labelCoins.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelCoins.Location = new System.Drawing.Point(79, 227);
+            this.labelCoins.Name = "labelCoins";
+            this.labelCoins.Size = new System.Drawing.Size(79, 23);
+            this.labelCoins.TabIndex = 14;
+            this.labelCoins.Text = "Arrows:";
+            // 
+            // mapControl1
+            // 
+            this.mapControl1.Cave = null;
+            this.mapControl1.GameLocations = null;
+            this.mapControl1.Location = new System.Drawing.Point(117, 224);
+            this.mapControl1.Name = "mapControl1";
+            this.mapControl1.Size = new System.Drawing.Size(600, 600);
+            this.mapControl1.TabIndex = 11;
+            // 
+            // triviaControl1
+            // 
+            this.triviaControl1.BackColor = System.Drawing.SystemColors.Control;
+            this.triviaControl1.Location = new System.Drawing.Point(144, 475);
+            this.triviaControl1.Name = "triviaControl1";
+            this.triviaControl1.Size = new System.Drawing.Size(550, 359);
+            this.triviaControl1.TabIndex = 7;
+            this.triviaControl1.Trivia = null;
+            this.triviaControl1.Visible = false;
+            // 
+            // pictureBoxImage
+            // 
+            this.pictureBoxImage.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxImage.Image")));
+            this.pictureBoxImage.Location = new System.Drawing.Point(117, 136);
+            this.pictureBoxImage.Name = "pictureBoxImage";
+            this.pictureBoxImage.Size = new System.Drawing.Size(618, 348);
+            this.pictureBoxImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxImage.TabIndex = 15;
+            this.pictureBoxImage.TabStop = false;
+            this.pictureBoxImage.Visible = false;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackColor = System.Drawing.Color.Gray;
+            this.pictureBox1.Location = new System.Drawing.Point(67, 194);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(700, 700);
+            this.pictureBox1.TabIndex = 6;
+            this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
+            this.pictureBox1.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox1_Paint);
+            this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
+            // 
+            // buttonBuyArrows
+            // 
+            this.buttonBuyArrows.Location = new System.Drawing.Point(94, 830);
+            this.buttonBuyArrows.Name = "buttonBuyArrows";
+            this.buttonBuyArrows.Size = new System.Drawing.Size(93, 45);
+            this.buttonBuyArrows.TabIndex = 16;
+            this.buttonBuyArrows.Text = "Buy Arrows";
+            this.buttonBuyArrows.UseVisualStyleBackColor = true;
+            this.buttonBuyArrows.Click += new System.EventHandler(this.buttonBuyArrows_Click);
+            // 
+            // buttonBuySecret
+            // 
+            this.buttonBuySecret.Location = new System.Drawing.Point(94, 770);
+            this.buttonBuySecret.Name = "buttonBuySecret";
+            this.buttonBuySecret.Size = new System.Drawing.Size(93, 45);
+            this.buttonBuySecret.TabIndex = 17;
+            this.buttonBuySecret.Text = "Buy Secret";
+            this.buttonBuySecret.UseVisualStyleBackColor = true;
+            this.buttonBuySecret.Click += new System.EventHandler(this.buttonBuySecret_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
@@ -147,21 +195,28 @@ namespace WumpusJones
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(817, 916);
-            this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.mapControl1);
+            this.Controls.Add(this.pictureBoxImage);
             this.Controls.Add(this.triviaControl1);
+            this.Controls.Add(this.buttonBuySecret);
+            this.Controls.Add(this.buttonBuyArrows);
+            this.Controls.Add(this.labelCoins);
+            this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.labelArrows);
             this.Controls.Add(this.buttonMap);
             this.Controls.Add(this.buttonArrow);
             this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.buttonHighScores);
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Form1";
             this.ShowIcon = false;
             this.Text = "Hunt the Wumpus";
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxImage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -171,7 +226,7 @@ namespace WumpusJones
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button buttonHighScores;
         private System.Windows.Forms.PictureBox pictureBox1;
         private TriviaControl triviaControl1;
         private System.Windows.Forms.Button buttonArrow;
@@ -179,6 +234,10 @@ namespace WumpusJones
         private MapControl mapControl1;
         private System.Windows.Forms.Label labelArrows;
         private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.Label labelCoins;
+        private System.Windows.Forms.PictureBox pictureBoxImage;
+        private System.Windows.Forms.Button buttonBuyArrows;
+        private System.Windows.Forms.Button buttonBuySecret;
     }
 }
 

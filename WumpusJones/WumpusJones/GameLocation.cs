@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace WumpusJones
@@ -18,8 +19,8 @@ namespace WumpusJones
         public GameLocation(Cave cave)
         {
             this.cave = cave;
-            cave.ExploredRoom(PlayerRoom);
             StartingRoom = PlayerRoom;
+            CreateHazards();
         }
 
         /// <summary>
@@ -39,6 +40,22 @@ namespace WumpusJones
 
             WumpusRoom = next;
         }
+
+        public bool IsWumpusNearby =>
+            cave.RoomAt(WumpusRoom).Neighbors
+                .Where(x => x > 0)
+                .Any(x => cave.RoomAt(x).Neighbors
+                          .Where(x => x > 0)
+                          .Any(x => x == PlayerRoom));
+
+        public void RandomizePlayer()
+        {
+            var room = 0;
+            while (room == 0 || room == BatRoom1 || room == BatRoom2 || room == WumpusRoom || room == HoleRoom)
+                room = rnd.Next(1, 31);
+            MovePlayer(room);
+        }
+
         public void CreateHazards()
         {
             List<int> rooms = new() { PlayerRoom };
@@ -60,8 +77,9 @@ namespace WumpusJones
             cave.ExploredRoom(PlayerRoom);
             var neighbors = cave.RoomAt(room).Neighbors;
             string value = "";
-            foreach (var r in neighbors)
+            foreach (var r1 in neighbors)
             {
+                var r = Math.Abs(r1);
                 if (r == WumpusRoom)
                 {
                     value += "You sense something huge nearby\n";
