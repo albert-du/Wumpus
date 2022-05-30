@@ -27,7 +27,7 @@ namespace WumpusJones
             var center = new Size(120, 125);
             using Pen border = new(Brushes.Black, 2);
             using Font font = new("Times New Roman", 20, FontStyle.Bold);
-
+      
             var room = GameLocations.PlayerRoom;
             var loc = (Point)center;
             var brush = Brushes.SkyBlue;
@@ -113,7 +113,19 @@ namespace WumpusJones
                 var hex = Form1.RegularHexagonCoordinates(hexSize, loc + center);
                 g.FillPolygon(brush, hex);
                 g.DrawPolygon(border, hex);
+#if DEBUG
+                var brush2 = room switch
+                {
+                    _ when room == GameLocations.WumpusRoom => Brushes.Red,
+                    _ when room == GameLocations.BatRoom1 => Brushes.Green,
+                    _ when room == GameLocations.BatRoom2 => Brushes.GreenYellow,
+                    _ when room == GameLocations.HoleRoom => Brushes.BlueViolet,
+                    _ => Brushes.Black
+                };
+                g.DrawString(room.ToString(), font, brush2, hex[0] + new Size(hexSize / 2 + 5, -5));
+#else
                 g.DrawString(room.ToString(), font, Brushes.Black, hex[0] + new Size(hexSize / 2 + 5, -5));
+#endif
             }
         }
     }

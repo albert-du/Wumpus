@@ -53,7 +53,7 @@ namespace WumpusJones
             // labelQuestion
             // 
             this.labelQuestion.AutoSize = true;
-            this.labelQuestion.Location = new System.Drawing.Point(34, 84);
+            this.labelQuestion.Location = new System.Drawing.Point(43, 98);
             this.labelQuestion.Name = "labelQuestion";
             this.labelQuestion.Size = new System.Drawing.Size(46, 17);
             this.labelQuestion.TabIndex = 1;
@@ -132,11 +132,11 @@ namespace WumpusJones
             // 
             this.labelCompletion.AutoSize = true;
             this.labelCompletion.Font = new System.Drawing.Font("Courier New", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelCompletion.Location = new System.Drawing.Point(359, 34);
+            this.labelCompletion.Location = new System.Drawing.Point(230, 45);
             this.labelCompletion.Name = "labelCompletion";
-            this.labelCompletion.Size = new System.Drawing.Size(190, 27);
+            this.labelCompletion.Size = new System.Drawing.Size(302, 27);
             this.labelCompletion.TabIndex = 9;
-            this.labelCompletion.Text = "[☑] [❎] [ ]";
+            this.labelCompletion.Text = "[☑] [❎] [ ] [ ] [ ]";
             // 
             // TriviaControl
             // 
