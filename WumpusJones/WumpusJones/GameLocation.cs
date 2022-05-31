@@ -33,10 +33,9 @@ namespace WumpusJones
         public void MoveWumpus()
         {
             var validMovements = cave.RoomAt(WumpusRoom).Neighbors.Where(x => x > 0).ToList();
-            int next = 0;
-            while (next == 0 || next == PlayerRoom)
-                next = validMovements.ElementAt(rnd.Next(validMovements.Count));
-            WumpusRoom = next;
+            do
+                WumpusRoom = validMovements.ElementAt(rnd.Next(validMovements.Count));
+            while (WumpusRoom == PlayerRoom);
         }
 
         public void TriviaLost() =>

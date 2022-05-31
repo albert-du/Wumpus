@@ -123,9 +123,13 @@ namespace WumpusJones
             {
                 TextChanged($"Nothing hit in {room}", false);
                 if (rnd.Next(0, 2) == 0)
+                {
                     GameLocation.MoveWumpus();
+                    TextChanged(GameLocation.MovePlayer(GameLocation.PlayerRoom));
+                }
             }
             GameLocation.WumpusTurn();
+            StatsChanged();
         }
 
         public void BuyArrows()
@@ -148,7 +152,7 @@ namespace WumpusJones
             0 => $"Snakes at {(rnd.Next(2) == 0 ? GameLocation.BatRoom1 : GameLocation.BatRoom2)}",
             1 => $"Pit at {GameLocation.HoleRoom}",
             2 => $"Boulder at {GameLocation.WumpusRoom}",
-            3 => $"Wumpus is {(GameLocation.IsWumpusNearby ? string.Empty : "not")} nearby",
+            3 => $"Boulder is {(GameLocation.IsWumpusNearby ? string.Empty : "not")} nearby",
             4 => $"You're at {GameLocation.PlayerRoom}",
             _ => $"{_triviaSource.GetAlreadyAskedQuestion()}"
         };
