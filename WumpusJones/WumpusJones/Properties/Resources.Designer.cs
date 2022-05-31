@@ -63,6 +63,7 @@ namespace WumpusJones.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+<<<<<<< Updated upstream
         internal static System.Drawing.Bitmap bottomlesspit {
             get {
                 object obj = ResourceManager.GetObject("bottomlesspit", resourceCulture);
@@ -86,6 +87,11 @@ namespace WumpusJones.Properties {
         internal static System.Drawing.Bitmap indiana_jones_snakes {
             get {
                 object obj = ResourceManager.GetObject("indiana_jones_snakes", resourceCulture);
+=======
+        internal static System.Drawing.Bitmap burdda {
+            get {
+                object obj = ResourceManager.GetObject("burdda", resourceCulture);
+>>>>>>> Stashed changes
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
