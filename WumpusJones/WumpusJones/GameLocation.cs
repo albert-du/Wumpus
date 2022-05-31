@@ -1,63 +1,88 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WumpusJones
 {
-    class GameLocation
+    public class GameLocation
     {
         public int PlayerRoom { get; set; }
-        public int WumpusRoom { get; set; }
+        public int StartingRoom { get; }
+        public int WumpusRoom 
+        { 
+            get => wumpus.Room;
+            set => wumpus.Room = value; 
+        }
         public int BatRoom1 { get; set; }
         public int BatRoom2 { get; set; }
         public int HoleRoom { get; set; }
 
-        Random rnd = new Random();
-        Cave cave;
+        private ActiveWumpus wumpus;
+        private Random rnd = new Random();
+        private Cave cave;
 
         public GameLocation(Cave cave)
         {
             this.cave = cave;
+            wumpus = new(cave);
+            PlayerRoom = rnd.Next(1, 31);
+            StartingRoom = PlayerRoom;
+            CreateHazards();
         }
 
-        /// <summary>
-        /// Moves the boulder (wumpus) 2 caves over
-        /// </summary>
-        public void RandomizeWumpus()
+        public void MoveWumpus()
         {
             var validMovements = cave.RoomAt(WumpusRoom).Neighbors.Where(x => x > 0).ToList();
-            int next = 0;
-            while (next == 0 || next == PlayerRoom)
-                next = validMovements.ElementAt(rnd.Next(validMovements.Count));
-
-            validMovements = cave.RoomAt(next).Neighbors.Where(x => x > 0).ToList();
-            next = 0;
-            while (next == 0 || next == PlayerRoom)
-                next = validMovements.ElementAt(rnd.Next(validMovements.Count));
-
-            WumpusRoom = next;
+            do
+                WumpusRoom = validMovements.ElementAt(rnd.Next(validMovements.Count));
+            while (WumpusRoom == PlayerRoom);
         }
+
+        public void TriviaLost() =>
+            wumpus.LostTrivia();
+
+        public void WumpusTurn() =>
+            wumpus.Turn(PlayerRoom);
+
+        public bool IsWumpusNearby =>
+            cave.RoomAt(WumpusRoom).Neighbors
+                .Where(x => x > 0)
+                .Any(x => cave.RoomAt(x).Neighbors
+                          .Where(x => x > 0)
+                          .Any(x => x == PlayerRoom));
+
+        public void RandomizePlayer()
+        {
+            var room = 0;
+            while (room == 0 || room == BatRoom1 || room == BatRoom2 || room == WumpusRoom || room == HoleRoom)
+                room = rnd.Next(1, 31);
+            MovePlayer(room);
+        }
+
         public void CreateHazards()
         {
-            int bat1 = rnd.Next(30) + 1;
-            int bat2 = rnd.Next(30) + 1;
-            int wumpus = rnd.Next(30) + 1;
-            int hole = rnd.Next(30) + 1;
-
-            WumpusRoom = wumpus;
-            BatRoom1 = bat1;
-            BatRoom2 = bat2;
-            HoleRoom = hole;
+            List<int> rooms = new() { PlayerRoom };
+            while (rooms.Count < 5)
+            {
+                var r = rnd.Next(1, 31);
+                if (!rooms.Contains(r))
+                    rooms.Add(r);
+            }
+            WumpusRoom = rooms[1];
+            BatRoom1 = rooms[2];
+            BatRoom2 = rooms[3];
+            HoleRoom = rooms[4];
         }
 
         public string MovePlayer(int room)
         {
+            PlayerRoom = room;
+            cave.ExploredRoom(PlayerRoom);
             var neighbors = cave.RoomAt(room).Neighbors;
             string value = "";
-            foreach (var r in neighbors)
+            foreach (var r1 in neighbors)
             {
+                var r = Math.Abs(r1);
                 if (r == WumpusRoom)
                 {
                     value += "You sense something huge nearby\n";
@@ -68,7 +93,7 @@ namespace WumpusJones
                 }
                 if (r == BatRoom1 && r == BatRoom2)
                 {
-                    value += "Sounds are louder than usual\n";
+                    value += "The sounds are louder than usual\n";
                 }
                 if (r == HoleRoom)
                 {

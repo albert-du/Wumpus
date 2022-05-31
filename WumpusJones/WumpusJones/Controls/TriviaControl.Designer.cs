@@ -37,12 +37,14 @@ namespace WumpusJones
             this.buttonB = new System.Windows.Forms.Button();
             this.buttonD = new System.Windows.Forms.Button();
             this.buttonC = new System.Windows.Forms.Button();
+            this.buttonNext = new System.Windows.Forms.Button();
+            this.labelCompletion = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // labelTitle
             // 
             this.labelTitle.AutoSize = true;
-            this.labelTitle.Location = new System.Drawing.Point(19, 22);
+            this.labelTitle.Location = new System.Drawing.Point(34, 24);
             this.labelTitle.Name = "labelTitle";
             this.labelTitle.Size = new System.Drawing.Size(163, 17);
             this.labelTitle.TabIndex = 0;
@@ -51,7 +53,7 @@ namespace WumpusJones
             // labelQuestion
             // 
             this.labelQuestion.AutoSize = true;
-            this.labelQuestion.Location = new System.Drawing.Point(34, 84);
+            this.labelQuestion.Location = new System.Drawing.Point(43, 98);
             this.labelQuestion.Name = "labelQuestion";
             this.labelQuestion.Size = new System.Drawing.Size(46, 17);
             this.labelQuestion.TabIndex = 1;
@@ -115,11 +117,34 @@ namespace WumpusJones
             this.buttonC.UseVisualStyleBackColor = true;
             this.buttonC.Click += new System.EventHandler(this.buttonC_Click);
             // 
+            // buttonNext
+            // 
+            this.buttonNext.Enabled = false;
+            this.buttonNext.Location = new System.Drawing.Point(409, 314);
+            this.buttonNext.Name = "buttonNext";
+            this.buttonNext.Size = new System.Drawing.Size(105, 33);
+            this.buttonNext.TabIndex = 8;
+            this.buttonNext.Text = "Next";
+            this.buttonNext.UseVisualStyleBackColor = true;
+            this.buttonNext.Click += new System.EventHandler(this.buttonNext_Click);
+            // 
+            // labelCompletion
+            // 
+            this.labelCompletion.AutoSize = true;
+            this.labelCompletion.Font = new System.Drawing.Font("Courier New", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelCompletion.Location = new System.Drawing.Point(230, 45);
+            this.labelCompletion.Name = "labelCompletion";
+            this.labelCompletion.Size = new System.Drawing.Size(302, 27);
+            this.labelCompletion.TabIndex = 9;
+            this.labelCompletion.Text = "[☑] [❎] [ ] [ ] [ ]";
+            // 
             // TriviaControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
+            this.Controls.Add(this.labelCompletion);
+            this.Controls.Add(this.buttonNext);
             this.Controls.Add(this.buttonC);
             this.Controls.Add(this.buttonD);
             this.Controls.Add(this.buttonB);
@@ -145,5 +170,7 @@ namespace WumpusJones
         private System.Windows.Forms.Button buttonB;
         private System.Windows.Forms.Button buttonD;
         private System.Windows.Forms.Button buttonC;
+        private System.Windows.Forms.Button buttonNext;
+        private System.Windows.Forms.Label labelCompletion;
     }
 }
