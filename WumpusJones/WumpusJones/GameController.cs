@@ -28,7 +28,6 @@ namespace WumpusJones
         public void Move(int room)
         {
             MoveImpl(room);
-            GameLocation.WumpusTurn();
             Player.IncrementCoin();
             StatsChanged();
         }
@@ -46,7 +45,10 @@ namespace WumpusJones
                 if (room != GameLocation.HoleRoom)
                 {
                     if (room != GameLocation.BatRoom1 && room != GameLocation.BatRoom2)
+                    {
+                        GameLocation.WumpusTurn();
                         return;
+                    }
                     // Check for snakes
                     if (Player.Coins-- < 1)
                     {
@@ -61,6 +63,7 @@ namespace WumpusJones
                             return;
                         }
                         GameLocation.RandomizePlayer();
+                        GameLocation.WumpusTurn();
                         TextChanged("The snakes leave you in a new location");
                         OnMove?.Invoke(this, new PlayerMoveEventArgs());
                     });
@@ -80,6 +83,7 @@ namespace WumpusJones
                     }
                     GameLocation.MovePlayer(GameLocation.StartingRoom);
                     TextChanged("You climb out of the bottomless pit");
+                    GameLocation.WumpusTurn();
                     OnMove?.Invoke(this, new PlayerMoveEventArgs());
                 });
             }
@@ -102,6 +106,7 @@ namespace WumpusJones
                     return;
                 }
                 GameLocation.TriviaLost();
+                GameLocation.WumpusTurn();
                 TextChanged("The boulder rolls away");
                 callback1();
             });

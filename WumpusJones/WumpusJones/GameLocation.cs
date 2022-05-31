@@ -43,7 +43,7 @@ namespace WumpusJones
             wumpus.LostTrivia();
 
         public void WumpusTurn() =>
-            wumpus.Turn();
+            wumpus.Turn(PlayerRoom);
 
         public bool IsWumpusNearby =>
             cave.RoomAt(WumpusRoom).Neighbors
