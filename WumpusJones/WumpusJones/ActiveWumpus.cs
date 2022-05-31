@@ -30,9 +30,7 @@ namespace WumpusJones
             if (rnd.Next(0, 100) < 5)
             {
                 do
-                {
                     Room = rnd.Next(0, 31);
-                }
                 while (Room == player);
                 return;
             }
