@@ -16,6 +16,6 @@ jobs:
     - name: setup-msbuild
       uses: microsoft/setup-msbuild@v1.1
     - name: Restore dependencies
-      run: msbuild /t:restore ./WumpusJones/
+      run: msbuild /t:restore ./WumpusJones/WumpusJones/
     - name: Build
-      run: msbuild /p:RestorePackages=false ./WumpusJones/
+      run: msbuild /p:RestorePackages=false ./WumpusJones/WumpusJones/

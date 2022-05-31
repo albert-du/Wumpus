@@ -26,8 +26,8 @@
         {
             Turn();
         }
-
-        private void Turn()
+      
+        public void Turn()
         {
             Turns++;
         }
