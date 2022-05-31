@@ -12,6 +12,8 @@ namespace WumpusJones
         }
 
         public string PlayerName { get; private set; }
+        public int Cave =>
+            comboBoxCaveNumber.SelectedIndex + 1;
 
         private void buttonStart_Click(object sender, EventArgs e)
         {
