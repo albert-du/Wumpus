@@ -13,9 +13,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Setup .NET Core SDK
+      uses: actions/setup-dotnet@v2.1.0
+      with:
+        # Optional SDK version(s) to use. If not provided, will install global.json version when available. Examples: 2.2.104, 3.1, 3.1.x
+        dotnet-version: 6.0.x
     - name: setup-msbuild
       uses: microsoft/setup-msbuild@v1.1
     - name: Restore dependencies
-      run: msbuild /t:restore ./WumpusJones/
+      run: msbuild /t:restore ./WumpusJones/WumpusJones/
     - name: Build
-      run: msbuild /p:RestorePackages=false ./WumpusJones/
+      run: msbuild /p:RestorePackages=false ./WumpusJones/WumpusJones/

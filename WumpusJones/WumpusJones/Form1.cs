@@ -9,19 +9,23 @@ namespace WumpusJones
 {
     public partial class Form1 : Form
     {
-        bool shooting;
-        const int hexSize = 100;
+        private bool shooting;
+        private bool triviaActive;
+        private bool gameEnded;
+        private const int hexSize = 100;
 
-        Point? mouseLocation = null;
+        private Point? mouseLocation = null;
 
-        readonly IReadOnlyList<Point[]> hexagons;
+        private readonly IReadOnlyList<Point[]> hexagons;
 
-        GameController _gameController;
+        private readonly Trivia _trivaSource;
+        private readonly GameController _gameController;
+        private readonly Random rnd = new();
 
         public Form1(string playerName, int cave)
         {
-            _gameController = new(playerName, cave, Trivia);
             InitializeComponent();
+            // Calculate positioning for the onscreen hexagonal controls
             var dx = (int)(hexSize * 1.5);
             var dy = (int)(Math.Sqrt(3) * hexSize / 2);
             var center = new Size(pictureBox1.Size.Width / 2, pictureBox1.Size.Height / 2);
@@ -30,16 +34,33 @@ namespace WumpusJones
                 new Point(0, 0),
                 new Point(0, -2 * dy),
                 new Point(dx, -dy),
-                new Point(dx, dy), 
+                new Point(dx, dy),
                 new Point(0, 2 * dy),
                 new Point(-dx, dy),
                 new Point(-dx, -dy)
             }.Select(p => RegularHexagonCoordinates(hexSize, p + center)).ToArray();
+            
+            // Set the indiana jones font
             label1.Font = Program.CustomFont;
-            _gameController.OnMove += OnMove;
-        }
 
+            // Game Init
+            _trivaSource = new();
+            _gameController = new(playerName, cave, Trivia, _trivaSource);
+            triviaControl1.Trivia = _trivaSource;
+            mapControl1.Cave = _gameController.Cave;
+            mapControl1.GameLocations = _gameController.GameLocation;
+            OnStatsChanged(this, new EventArgs());
+
+            _gameController.OnMove += OnMove;
+            _gameController.OnTextChanged += OnTextChanged;
+            _gameController.OnGameEnd += OnGameEnd;
+            _gameController.OnStatsChanged += OnStatsChanged;
+            OnTextChanged(this, new TextChangeEventArgs { Text = _gameController.GameLocation.MovePlayer(_gameController.GameLocation.PlayerRoom) });
+        }
+        
+        // Enable dragging on more of the window
         #region Borderless dragging
+
         private void Form1_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -48,34 +69,60 @@ namespace WumpusJones
                 _ = SendMessage(Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0);
             }
         }
-        const int WM_NCLBUTTONDOWN = 0xA1;
-        const int HT_CAPTION = 0x2;
+
+        private const int WM_NCLBUTTONDOWN = 0xA1;
+        private const int HT_CAPTION = 0x2;
 
         [System.Runtime.InteropServices.DllImport("user32.dll")]
-        static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-        static extern bool ReleaseCapture();
-        #endregion
+        private static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
 
-        private void Trivia(string title, Action<bool> callback)
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern bool ReleaseCapture();
+
+        #endregion Borderless dragging
+
+        /// <summary>
+        /// Trivia trigger, executes callback when complete
+        /// Locks out the rest of the game until trivia is complete
+        /// Sets trivia question count based on type
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="type"></param>
+        /// <param name="callback"></param>
+        private void Trivia(string title, TriviaType type, Action<bool> callback)
         {
+            triviaActive = true;
+            if (type is not TriviaType.Arrows and not TriviaType.Secret)
+            {
+                // Set the image
+                pictureBoxImage.Image = type switch
+                {
+                    TriviaType.Boulder => Properties.Resources.boulder,
+                    TriviaType.Snakes => Properties.Resources.indiana_jones_snakes,
+                    _ => Properties.Resources.bottomlesspit
+                };
+                pictureBoxImage.Show();
+            }
+            triviaControl1.Init(title, type == TriviaType.Boulder ? 5 : 3);
+            // Setup callback
             void handler(object _, TriviaFinishedEventArgs args)
             {
+                triviaActive = false;
+                pictureBoxImage.Hide();
                 triviaControl1.TriviaFinished -= handler;
-                callback(args.Correct >= 2);
+                callback(args.Correct >= (type == TriviaType.Boulder ? 3 : 2));
             }
             triviaControl1.TriviaFinished += handler;
-        }
-        
-        private void buttonExit_Click(object sender, EventArgs e) =>
-            Application.Exit();
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
+            triviaControl1.Show();
         }
 
-        private Point[] RegularHexagonCoordinates(int length, Point center)
+        /// <summary>
+        /// Calculates reletive coordinates for hexagons
+        /// </summary>
+        /// <param name="length"></param>
+        /// <param name="center"></param>
+        /// <returns></returns>
+        internal static Point[] RegularHexagonCoordinates(int length, Point center)
         {
             var hlen = length / 2;
             var a = (int)(Math.Sqrt(3) * (float)hlen);
@@ -129,13 +176,18 @@ namespace WumpusJones
             using Pen border = new(Brushes.Black, 2);
             var i = 0;
             var neighbors = _gameController.PlayerLocation.Neighbors;
-            
+
             foreach (var hex in hexagons.Skip(1))
             {
-                var brush = Brushes.CornflowerBlue;
-                if (neighbors[i] < 0)
-                    brush = Brushes.DarkGray;
-                else if (mouseLocation.HasValue && IsPointInPolygon(hex, mouseLocation.Value))
+                var room = Math.Abs(neighbors[i]);
+                var brush = neighbors.Any(x => Math.Abs(x) == room) && neighbors.First(x => Math.Abs(x) == room) > 0
+                        ? (_gameController.Cave.Explored.Contains(room)
+                           ? Brushes.CadetBlue
+                           : Brushes.CornflowerBlue)
+                        : (_gameController.Cave.Explored.Contains(room)
+                           ? Brushes.PowderBlue
+                           : Brushes.DarkGray);
+                if (neighbors[i] > 0 && mouseLocation.HasValue && IsPointInPolygon(hex, mouseLocation.Value))
                     brush = shooting ? Brushes.Red : Brushes.SkyBlue;
                 g.FillPolygon(brush, hex);
                 g.DrawPolygon(border, hex);
@@ -162,6 +214,7 @@ namespace WumpusJones
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
+            if (triviaActive || gameEnded) return;
             // Figure out click location
             var i = 0;
             foreach (var hex in hexagons.Skip(1))
@@ -170,7 +223,10 @@ namespace WumpusJones
                 if (target > 0 && mouseLocation.HasValue && IsPointInPolygon(hex, mouseLocation.Value))
                 {
                     if (shooting)
+                    {
                         _gameController.Shoot(_gameController.PlayerLocation.Neighbors[i]);
+                        buttonArrow_Click(null, null);
+                    }
                     else
                         _gameController.Move(_gameController.PlayerLocation.Neighbors[i]);
                     return;
@@ -178,10 +234,64 @@ namespace WumpusJones
                 i++;
             }
         }
+
+        private void buttonMap_Click(object sender, EventArgs e)
+        {
+            mapControl1.Visible = !mapControl1.Visible;
+            if (mapControl1.Visible)
+                mapControl1.Invalidate();
+        }
+        private void buttonBuySecret_Click(object sender, EventArgs e)
+        {
+            if (triviaActive || gameEnded) return;
+            _gameController.BuySecret();
+        }
+
+        private void buttonBuyArrows_Click(object sender, EventArgs e)
+        {
+            if (triviaActive || gameEnded) return;
+            _gameController.BuyArrows();
+        }
+
+        private void buttonHighScores_Click(object sender, EventArgs e)
+        {
+            HighscoreForm highscoreForm = new() { HighScores = _gameController.Highscores };
+            highscoreForm.ShowDialog();
+        }
         
+        #region Game events
         private void OnMove(object sender, PlayerMoveEventArgs e)
         {
+            labelCoins.Text = $"Coins: {_gameController.Player.Coins}";
             pictureBox1.Invalidate();
         }
+
+        private void OnTextChanged(object sender, TextChangeEventArgs e)
+        {
+            if (string.IsNullOrEmpty(e.Text)) return;
+            var lines = e.Text.Split('\n').Where(x => !string.IsNullOrWhiteSpace(x));
+            var num = _gameController.GameLocation.PlayerRoom;
+            foreach (var line in lines)
+                richTextBox1.AppendText(e.IncludeRoom ? $"{num}: {line}\n" : $"{line}\n");
+            richTextBox1.ScrollToCaret();
+        }
+
+        private void OnGameEnd(object sender, GameEndEventArgs e)
+        {
+            gameEnded = true;
+            gameEndControl1.Title = e.Won ? "You Won" : "You Lost";
+            gameEndControl1.Message = e.Message;
+            gameEndControl1.Highscores = _gameController.Highscores;
+            gameEndControl1.Show();
+        }
+
+        private void OnStatsChanged(object sender, EventArgs e)
+        {
+            labelArrows.Text = $"Arrows: {_gameController.Player.Arrows}";
+            labelCoins.Text = $"Coins: {_gameController.Player.Coins}";
+            labelTurns.Text = $"Turns: {_gameController.Player.Turns}";
+            labelScore.Text = $"Score: {_gameController.GetScore(false).Score}";
+        }
+        #endregion
     }
 }

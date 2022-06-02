@@ -6,78 +6,110 @@ namespace WumpusJones
 {
     public class GameController
     {
-        private readonly GameLocation _gameLocation;
-        private readonly Action<string, Action<bool>> _trivia;
+        private readonly Action<string, TriviaType, Action<bool>> _trivia;
         private readonly string _name;
-        private int _startingRoom;
-
+        private readonly Trivia _triviaSource;
+        private readonly Random rnd = new();
         public Cave Cave { get; }
         public Player Player { get; }
+        public GameLocation GameLocation { get; }
+        public Highscores Highscores { get; } = new();
+        public Room PlayerLocation => Cave.RoomAt(GameLocation.PlayerRoom);
+        public PlayerScore GetScore(bool won) => new(_name, Player.Turns, Player.Coins, Player.Arrows, won);
 
-        public Room PlayerLocation => Cave.RoomAt(_gameLocation.PlayerRoom);
-
-        public GameController(string name, int caveNumber, Action<string, Action<bool>> trivia)
+        public GameController(string name, int caveNumber, Action<string, TriviaType, Action<bool>> trivia, Trivia triviaSource)
         {
             Player = new();
             Cave = new(caveNumber);
-            _gameLocation = new(Cave);
+            GameLocation = new(Cave);
             _name = name;
             _trivia = trivia;
-            _startingRoom = _gameLocation.PlayerRoom;
+            _triviaSource = triviaSource;
         }
+
         public void Move(int room)
         {
-            var output = _gameLocation.MovePlayer(room);
+            MoveImpl(room);
+            GameLocation.WumpusTurn();
+            Player.IncrementCoin();
+            StatsChanged();
+        }
+
+        private void MoveImpl(int room)
+        {
             Player.Turns++;
-            Player.Coins++;
-            
-            // TODO: get a piece of trivia and output with the warnings
-            TextChanged(output);
+            TextChanged(_triviaSource.GetRandomTrivia(), false);
+            TextChanged(GameLocation.MovePlayer(room));
             OnMove?.Invoke(this, new PlayerMoveEventArgs());
 
-            // a minor amount of callback hell to wait for user input
-            Action callback1 = () =>
+            // I wouldn't touch this.
+            void callback1()
             {
-                if (room != _gameLocation.HoleRoom)
+                if (room != GameLocation.HoleRoom)
                 {
-                    // callback2
+                    if (room != GameLocation.BatRoom1 && room != GameLocation.BatRoom2)
+                    {
+                        GameLocation.WumpusTurn();
+                        return;
+                    }
+                    // Check for snakes
+                    if (Player.Coins-- < 1)
+                    {
+                        GameEnded(false, "The snakes kill you");
+                        return;
+                    }
+                    _trivia("The snakes are carrying you away", TriviaType.Snakes, success =>
+                    {
+                        if (!success)
+                        {
+                            GameEnded(false, "The snakes kill you");
+                            return;
+                        }
+                        GameLocation.RandomizePlayer();
+                        GameLocation.WumpusTurn();
+                        TextChanged("The snakes leave you in a new location");
+                        OnMove?.Invoke(this, new PlayerMoveEventArgs());
+                    });
                     return;
                 }
-                if (Player.Coins-- < 0)
+                if (Player.Coins-- < 1)
                 {
                     GameEnded(false, "You die in a bottomless pit");
                     return;
                 }
-                _trivia("You're falling into a bottomless pit!", success => {
+                _trivia("You're falling into a bottomless pit!", TriviaType.Pit, success =>
+                {
                     if (!success)
                     {
                         GameEnded(false, "You die in the bottomless pit.");
                         return;
                     }
-                    _gameLocation.MovePlayer(_startingRoom);
+                    GameLocation.MovePlayer(GameLocation.StartingRoom);
                     TextChanged("You climb out of the bottomless pit");
+                    GameLocation.WumpusTurn();
                     OnMove?.Invoke(this, new PlayerMoveEventArgs());
                 });
-            };
+            }
 
-            if (room != _gameLocation.WumpusRoom)
+            if (room != GameLocation.WumpusRoom)
             {
                 callback1();
                 return;
             }
-            if (Player.Coins-- < 0)
+            if (Player.Coins-- < 1)
             {
                 GameEnded(false, "The Boulder Crushes you.");
                 return;
             }
-            _trivia("You have encountered the boulder!", success =>
+            _trivia("You have encountered the boulder!", TriviaType.Boulder, success =>
             {
                 if (!success)
                 {
                     GameEnded(false, "The Boulder Crushes you.");
                     return;
                 }
-                _gameLocation.RandomizeWumpus();
+                GameLocation.TriviaLost();
+                GameLocation.WumpusTurn();
                 TextChanged("The boulder rolls away");
                 callback1();
             });
@@ -85,10 +117,21 @@ namespace WumpusJones
 
         public void Shoot(int room)
         {
-            if (room == _gameLocation.WumpusRoom)
+            if (room == GameLocation.WumpusRoom)
                 GameEnded(true, "You've destroyed the Boulder");
-            else if (Player.ShootArrows())
+            else if (!Player.ShootArrows())
                 GameEnded(false, "The Boulder senses your weakness and crushes you.");
+            else
+            {
+                TextChanged($"Nothing hit in {room}", false);
+                if (rnd.Next(0, 2) == 0)
+                {
+                    GameLocation.MoveWumpus();
+                    TextChanged(GameLocation.MovePlayer(GameLocation.PlayerRoom));
+                }
+            }
+            GameLocation.WumpusTurn();
+            StatsChanged();
         }
 
         public void BuyArrows()
@@ -96,17 +139,58 @@ namespace WumpusJones
             if (Player.Coins > 0)
             {
                 Player.Coins--;
-                _trivia("Buy an arrow.", _ => Player.ArrowPurchase());
+                _trivia("Buy an arrow.", TriviaType.Arrows, x => 
+                {
+                    if (x) Player.ArrowPurchase();
+                    else Player.Turns++;
+                    StatsChanged(); 
+                });
+                GameLocation.WumpusTurn();
+            }
+        }
+
+        private string GetSecret() => rnd.Next(6) switch
+        {
+            0 => $"Snakes at {(rnd.Next(2) == 0 ? GameLocation.BatRoom1 : GameLocation.BatRoom2)}",
+            1 => $"Pit at {GameLocation.HoleRoom}",
+            2 => $"Boulder at {GameLocation.WumpusRoom}",
+            3 => $"Boulder is {(GameLocation.IsWumpusNearby ? string.Empty : "not")} nearby",
+            4 => $"You're at {GameLocation.PlayerRoom}",
+            _ => $"{_triviaSource.GetAlreadyAskedQuestion()}"
+        };
+
+        public void BuySecret()
+        {
+            if (Player.Coins > 0)
+            {
+                Player.Coins--;
+                _trivia("Buying a secret", TriviaType.Secret, success =>
+                {
+                    TextChanged(success ? $"SECRET: {GetSecret()}" : "No secret", false);
+                    Player.SecretPurchase();
+                    StatsChanged();
+                });
+                GameLocation.WumpusTurn();
             }
         }
 
         public event EventHandler<TextChangeEventArgs>? OnTextChanged;
+
         public event EventHandler<GameEndEventArgs>? OnGameEnd;
+
         public event EventHandler<PlayerMoveEventArgs>? OnMove;
-        
-        private void TextChanged(string text) =>
-            OnTextChanged?.Invoke(this, new TextChangeEventArgs { Text = text });
-        private void GameEnded(bool won, string message) =>
+        public event EventHandler? OnStatsChanged;
+
+        private void TextChanged(string text, bool includeRoomNum = true) =>
+            OnTextChanged?.Invoke(this, new TextChangeEventArgs { Text = text, IncludeRoom = includeRoomNum });
+
+        private void GameEnded(bool won, string message)
+        {
+            Highscores.Add(GetScore(won));
             OnGameEnd?.Invoke(this, new GameEndEventArgs { Won = won, Message = message });
+        }
+    
+        private void StatsChanged() =>
+            OnStatsChanged?.Invoke(this, new EventArgs());
     }
 }
