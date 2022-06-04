@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.31410.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WumpusJones", "WumpusJones\WumpusJones.csproj", "{7D619F1F-58D6-4A7D-81FD-93D9734A7945}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WumpusJones.Tests", "WumpusJones.Tests\WumpusJones.Tests.csproj", "{3B18DA19-0015-46D8-A6C7-D135A329DE73}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WumpusJonesPlayer.Tests", "WumpusJones.Tests\WumpusJonesPlayer.Tests.csproj", "{3B18DA19-0015-46D8-A6C7-D135A329DE73}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WumpusJonesCaveTests", "WumpusJonesCaveTests\WumpusJonesCaveTests.csproj", "{43517417-056A-4AD9-AA52-BECBE3D8DDC7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{3B18DA19-0015-46D8-A6C7-D135A329DE73}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B18DA19-0015-46D8-A6C7-D135A329DE73}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B18DA19-0015-46D8-A6C7-D135A329DE73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43517417-056A-4AD9-AA52-BECBE3D8DDC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43517417-056A-4AD9-AA52-BECBE3D8DDC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43517417-056A-4AD9-AA52-BECBE3D8DDC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43517417-056A-4AD9-AA52-BECBE3D8DDC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
