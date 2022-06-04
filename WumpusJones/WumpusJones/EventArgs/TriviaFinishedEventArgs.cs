@@ -4,7 +4,7 @@ namespace WumpusJones
 {
     public class TriviaFinishedEventArgs : EventArgs
     {
-        public int Correct { get; set; }
-        public int Incorrect { get; set; }
+        public int Correct { get; init; }
+        public int Incorrect { get; init; }
     }
 }
