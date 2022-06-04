@@ -37,7 +37,7 @@ namespace WumpusJones
 
         private void MoveImpl(int room)
         {
-            Player.Turns++;
+            Player.Turn();
             TextChanged(_triviaSource.GetRandomTrivia(), false);
             TextChanged(GameLocation.MovePlayer(room));
             OnMove?.Invoke(this, new PlayerMoveEventArgs());
@@ -130,7 +130,7 @@ namespace WumpusJones
                     TextChanged(GameLocation.MovePlayer(GameLocation.PlayerRoom));
                 }
             }
-            GameLocation.WumpusTurn();
+            Player.Turn();
             StatsChanged();
         }
 
@@ -142,10 +142,9 @@ namespace WumpusJones
                 _trivia("Buy an arrow.", TriviaType.Arrows, x => 
                 {
                     if (x) Player.ArrowPurchase();
-                    else Player.Turns++;
+                    Player.Turn();
                     StatsChanged(); 
                 });
-                GameLocation.WumpusTurn();
             }
         }
 
@@ -167,10 +166,10 @@ namespace WumpusJones
                 _trivia("Buying a secret", TriviaType.Secret, success =>
                 {
                     TextChanged(success ? $"SECRET: {GetSecret()}" : "No secret", false);
-                    Player.SecretPurchase();
+                    if (success) Player.SecretPurchase();
+                    Player.Turn();
                     StatsChanged();
                 });
-                GameLocation.WumpusTurn();
             }
         }
 

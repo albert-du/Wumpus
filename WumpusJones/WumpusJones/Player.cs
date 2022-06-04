@@ -2,35 +2,27 @@
 {
     public class Player
     {
-        public int Arrows { get; set; } = 3;
-        public int Turns { get; set; }
+        public int Arrows { get; private set; } = 3;
+        public int Turns { get; private set; }
         public int Coins { get; set; } = 5;
-        public double Secret { get; set; }
+        public int Secrets { get; private set; }
 
         private int totalCoins;
 
         public bool ShootArrows()
         {
-            Turn();
             Arrows -= 1;
             return Arrows > 0;
         }
 
-        public void ArrowPurchase()
-        {
+        public void ArrowPurchase() =>
             Arrows += 2;
-            Turn();
-        }
-
-        public void SecretPurchase()
-        {
-            Turn();
-        }
+        
+        public void SecretPurchase() =>
+            Secrets++;
       
-        public void Turn()
-        {
+        public void Turn() =>
             Turns++;
-        }
 
         public void IncrementCoin()
         {
