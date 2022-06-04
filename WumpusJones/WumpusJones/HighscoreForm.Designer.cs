@@ -197,20 +197,9 @@ namespace WumpusJones
             this.listBox1.Font = new System.Drawing.Font("Impact", 14.7F);
             this.listBox1.FormattingEnabled = true;
             this.listBox1.ItemHeight = 29;
-            this.listBox1.Items.AddRange(new object[] {
-            "1",
-            "2",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7",
-            "8",
-            "9",
-            "10"});
             this.listBox1.Location = new System.Drawing.Point(126, 89);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(621, 294);
+            this.listBox1.Size = new System.Drawing.Size(621, 323);
             this.listBox1.TabIndex = 14;
             // 
             // HighscoreForm

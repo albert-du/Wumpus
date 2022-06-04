@@ -222,6 +222,7 @@ namespace WumpusJones
                 var target = _gameController.PlayerLocation.Neighbors[i];
                 if (target > 0 && mouseLocation.HasValue && IsPointInPolygon(hex, mouseLocation.Value))
                 {
+                    richTextBox1.Clear();
                     if (shooting)
                     {
                         _gameController.Shoot(_gameController.PlayerLocation.Neighbors[i]);

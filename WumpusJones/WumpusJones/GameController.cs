@@ -30,7 +30,6 @@ namespace WumpusJones
         public void Move(int room)
         {
             MoveImpl(room);
-            GameLocation.WumpusTurn();
             Player.IncrementCoin();
             StatsChanged();
         }
