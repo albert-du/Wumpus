@@ -7,7 +7,7 @@ namespace WumpusJones
 {
     public class Cave
     {
-        private Room[] rooms;
+        private readonly Room[] rooms;
         public List<int> Explored { get; } = new();
 
         public Room RoomAt(int roomNumber) => rooms[roomNumber - 1];
@@ -15,7 +15,7 @@ namespace WumpusJones
         public Cave(int map)
         {
             var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = assembly.GetManifestResourceNames().Single(x => x.EndsWith($"Cave.dat"));
+            var resourceName = assembly.GetManifestResourceNames().Single(x => x.EndsWith("Cave.dat"));
             using var stream = assembly.GetManifestResourceStream(resourceName);
             using StreamReader reader = new(stream);
 
