@@ -13,7 +13,9 @@ namespace WumpusJones
         public Cave Cave { get; }
         public Player Player { get; }
         public GameLocation GameLocation { get; }
+        public Highscores Highscores { get; } = new();
         public Room PlayerLocation => Cave.RoomAt(GameLocation.PlayerRoom);
+        public PlayerScore GetScore(bool won) => new(_name, Player.Turns, Player.Coins, Player.Arrows, won);
 
         public GameController(string name, int caveNumber, Action<string, TriviaType, Action<bool>> trivia, Trivia triviaSource)
         {
@@ -182,9 +184,12 @@ namespace WumpusJones
         private void TextChanged(string text, bool includeRoomNum = true) =>
             OnTextChanged?.Invoke(this, new TextChangeEventArgs { Text = text, IncludeRoom = includeRoomNum });
 
-        private void GameEnded(bool won, string message) =>
+        private void GameEnded(bool won, string message)
+        {
+            Highscores.Add(GetScore(won));
             OnGameEnd?.Invoke(this, new GameEndEventArgs { Won = won, Message = message });
-
+        }
+    
         private void StatsChanged() =>
             OnStatsChanged?.Invoke(this, new EventArgs());
     }

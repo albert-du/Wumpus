@@ -255,7 +255,8 @@ namespace WumpusJones
 
         private void buttonHighScores_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            HighscoreForm highscoreForm = new() { HighScores = _gameController.Highscores };
+            highscoreForm.ShowDialog();
         }
         
         #region Game events
@@ -280,6 +281,7 @@ namespace WumpusJones
             gameEnded = true;
             gameEndControl1.Title = e.Won ? "You Won" : "You Lost";
             gameEndControl1.Message = e.Message;
+            gameEndControl1.Highscores = _gameController.Highscores;
             gameEndControl1.Show();
         }
 
@@ -288,9 +290,8 @@ namespace WumpusJones
             labelArrows.Text = $"Arrows: {_gameController.Player.Arrows}";
             labelCoins.Text = $"Coins: {_gameController.Player.Coins}";
             labelTurns.Text = $"Turns: {_gameController.Player.Turns}";
-            labelScore.Text = $"Score: {"IDK"}";
+            labelScore.Text = $"Score: {_gameController.GetScore(false).Score}";
         }
         #endregion
-        
     }
 }
