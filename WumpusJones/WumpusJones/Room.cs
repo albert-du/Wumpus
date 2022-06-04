@@ -13,13 +13,8 @@ namespace WumpusJones
             Number = number;
             Neighbors = new[] { n, ne, se, s, sw, nw };
         }
-        
-        public Room(int[] numbers)
-        {
-            if (numbers.Length != 7) throw new ArgumentException("Insufficient numbers", nameof(numbers));
-            Number = numbers[0];
-            Neighbors = numbers.Skip(1).ToArray();
-        }
+
+        public Room(int[] numbers) : this(numbers[0], numbers[1], numbers[2], numbers[3], numbers[4], numbers[5], numbers[6]) { }
 
         public void Parse(string text)
         {
