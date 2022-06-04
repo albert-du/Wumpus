@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace WumpusJones
 {
@@ -11,6 +12,13 @@ namespace WumpusJones
         {
             Number = number;
             Neighbors = new[] { n, ne, se, s, sw, nw };
+        }
+        
+        public Room(int[] numbers)
+        {
+            if (numbers.Length != 7) throw new ArgumentException("Insufficient numbers", nameof(numbers));
+            Number = numbers[0];
+            Neighbors = numbers.Skip(1).ToArray();
         }
 
         public void Parse(string text)

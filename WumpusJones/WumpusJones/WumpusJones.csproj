@@ -185,6 +185,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Resources\Caves\Cave.dat" />
     <EmbeddedResource Include="Resources\Caves\Cave1.dat" />
     <EmbeddedResource Include="Resources\Caves\Cave2.dat" />
     <EmbeddedResource Include="Resources\Caves\Cave3.dat" />
