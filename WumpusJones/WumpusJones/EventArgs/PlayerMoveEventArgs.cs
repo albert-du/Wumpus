@@ -4,6 +4,6 @@ namespace WumpusJones
 {
     public class PlayerMoveEventArgs : EventArgs
     {
-        public string Text { get; init; }
+        public bool Snakes { get; init; }
     }
 }
