@@ -2,7 +2,7 @@
 
 namespace WumpusJones
 {
-    public record PlayerScore(string Name, int Turns, int Coins, int Arrows, bool WumpusKilled)
+    public record PlayerScore(string Name, int Turns, int Coins, int Arrows, bool WumpusKilled, bool ActiveWumpus)
     {
         public DateTime Time { get; private init; } = DateTime.UtcNow;
         public int Score =>

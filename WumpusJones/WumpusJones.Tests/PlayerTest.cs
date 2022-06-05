@@ -27,7 +27,7 @@ namespace WumpusJones.Tests
         {
             Player player = new Player();
             player.SecretPurchase();
-            Assert.AreEqual(player.Secret, 1);
+            Assert.AreEqual(player.Secrets, 1);
         }
         public void TestTurn()
         {

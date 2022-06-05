@@ -22,7 +22,7 @@ namespace WumpusJones
         private readonly GameController _gameController;
         private readonly Random rnd = new();
 
-        public Form1(string playerName, int cave)
+        public Form1(string playerName, int cave, bool activeWumpus)
         {
             InitializeComponent();
             // Calculate positioning for the onscreen hexagonal controls
@@ -45,7 +45,7 @@ namespace WumpusJones
 
             // Game Init
             _trivaSource = new();
-            _gameController = new(playerName, cave, Trivia, _trivaSource);
+            _gameController = new(playerName, cave, Trivia, _trivaSource, activeWumpus);
             triviaControl1.Trivia = _trivaSource;
             mapControl1.Cave = _gameController.Cave;
             mapControl1.GameLocations = _gameController.GameLocation;
@@ -263,7 +263,20 @@ namespace WumpusJones
         #region Game events
         private void OnMove(object sender, PlayerMoveEventArgs e)
         {
-            labelCoins.Text = $"Coins: {_gameController.Player.Coins}";
+            if (e.Snakes)
+            {
+                // Show snakes
+                pictureBoxImage.Image = Properties.Resources.indiana_jones_snakes;
+                pictureBoxImage.Show();
+                Timer timer = new() { Interval = 2000 };
+                timer.Tick += (_, _) =>
+                {
+                    pictureBoxImage.Hide();
+                    timer.Stop();
+                };
+                timer.Start();
+
+            }
             pictureBox1.Invalidate();
         }
 

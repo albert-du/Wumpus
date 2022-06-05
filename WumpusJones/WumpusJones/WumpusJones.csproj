@@ -146,6 +146,8 @@
     <Compile Include="Controls\TriviaControl.Designer.cs">
       <DependentUpon>TriviaControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Wumpus.cs" />
+    <Compile Include="WumpusState.cs" />
     <EmbeddedResource Include="Controls\GameEndControl.resx">
       <DependentUpon>GameEndControl.cs</DependentUpon>
     </EmbeddedResource>

@@ -8,27 +8,35 @@ namespace WumpusJones
     {
         private readonly Action<string, TriviaType, Action<bool>> _trivia;
         private readonly string _name;
+        private readonly bool _activeWumpus;
         private readonly Trivia _triviaSource;
         private readonly Random rnd = new();
+        private readonly Wumpus wumpus;
         public Cave Cave { get; }
         public Player Player { get; }
         public GameLocation GameLocation { get; }
         public Highscores Highscores { get; } = new();
         public Room PlayerLocation => Cave.RoomAt(GameLocation.PlayerRoom);
-        public PlayerScore GetScore(bool won) => new(_name, Player.Turns, Player.Coins, Player.Arrows, won);
+        public PlayerScore GetScore(bool won) => new(_name, Player.Turns, Player.Coins, Player.Arrows, won, _activeWumpus);
 
-        public GameController(string name, int caveNumber, Action<string, TriviaType, Action<bool>> trivia, Trivia triviaSource)
+        public GameController(string name, int caveNumber, Action<string, TriviaType, Action<bool>> trivia, Trivia triviaSource, bool activeWumpus)
         {
             Player = new();
             Cave = new(caveNumber);
             GameLocation = new(Cave);
+            wumpus = activeWumpus ?  new ActiveWumpus(Cave) : new Wumpus(Cave);
+            wumpus.Room = rnd.Next(1, 31);
             _name = name;
+            _activeWumpus = activeWumpus;
             _trivia = trivia;
             _triviaSource = triviaSource;
         }
 
         public void Move(int room)
         {
+            Player.Turn();
+            TextChanged(_triviaSource.GetRandomTrivia(), false);
+            TextChanged(GameLocation.MovePlayer(room));
             MoveImpl(room);
             Player.IncrementCoin();
             StatsChanged();
@@ -36,39 +44,25 @@ namespace WumpusJones
 
         private void MoveImpl(int room)
         {
-            Player.Turn();
-            TextChanged(_triviaSource.GetRandomTrivia(), false);
-            TextChanged(GameLocation.MovePlayer(room));
-            OnMove?.Invoke(this, new PlayerMoveEventArgs());
-
             // I wouldn't touch this.
             void callback1()
             {
                 if (room != GameLocation.HoleRoom)
                 {
-                    if (room != GameLocation.BatRoom1 && room != GameLocation.BatRoom2)
+                    var b1 = room == GameLocation.BatRoom1;
+                    if (b1 || room == GameLocation.BatRoom2)
                     {
-                        GameLocation.WumpusTurn();
-                        return;
-                    }
-                    // Check for snakes
-                    if (Player.Coins-- < 1)
-                    {
-                        GameEnded(false, "The snakes kill you");
-                        return;
-                    }
-                    _trivia("The snakes are carrying you away", TriviaType.Snakes, success =>
-                    {
-                        if (!success)
-                        {
-                            GameEnded(false, "The snakes kill you");
-                            return;
-                        }
+                        if (b1)
+                            GameLocation.RandomizeBat1();
+                        else
+                            GameLocation.RandomizeBat2();
                         GameLocation.RandomizePlayer();
-                        GameLocation.WumpusTurn();
                         TextChanged("The snakes leave you in a new location");
-                        OnMove?.Invoke(this, new PlayerMoveEventArgs());
-                    });
+                        TextChanged(GameLocation.MovePlayer(GameLocation.PlayerRoom));
+                        PlayerMove(true);
+                    }
+                    else 
+                        PlayerMove();
                     return;
                 }
                 if (Player.Coins-- < 1)
@@ -83,10 +77,9 @@ namespace WumpusJones
                         GameEnded(false, "You die in the bottomless pit.");
                         return;
                     }
-                    GameLocation.MovePlayer(GameLocation.StartingRoom);
                     TextChanged("You climb out of the bottomless pit");
-                    GameLocation.WumpusTurn();
-                    OnMove?.Invoke(this, new PlayerMoveEventArgs());
+                    TextChanged(GameLocation.MovePlayer(GameLocation.StartingRoom));
+                    PlayerMove();
                 });
             }
 
@@ -107,9 +100,9 @@ namespace WumpusJones
                     GameEnded(false, "The Boulder Crushes you.");
                     return;
                 }
-                GameLocation.TriviaLost();
-                GameLocation.WumpusTurn();
+                wumpus.TriviaLost();
                 TextChanged("The boulder rolls away");
+                PlayerMove();
                 callback1();
             });
         }
@@ -125,7 +118,7 @@ namespace WumpusJones
                 TextChanged($"Nothing hit in {room}", false);
                 if (rnd.Next(0, 2) == 0)
                 {
-                    GameLocation.MoveWumpus();
+                    wumpus.ArrowMissed();
                     TextChanged(GameLocation.MovePlayer(GameLocation.PlayerRoom));
                 }
             }
@@ -181,6 +174,17 @@ namespace WumpusJones
 
         private void TextChanged(string text, bool includeRoomNum = true) =>
             OnTextChanged?.Invoke(this, new TextChangeEventArgs { Text = text, IncludeRoom = includeRoomNum });
+
+        private void PlayerMove(bool snakes = false)
+        {
+            wumpus.WumpusTurn();
+            GameLocation.WumpusRoom = wumpus.Room;
+            OnMove?.Invoke(this, new PlayerMoveEventArgs { Snakes = snakes });
+            if (wumpus.Room == GameLocation.PlayerRoom)
+                MoveImpl(wumpus.Room);
+            StatsChanged();
+        }
+
 
         private void GameEnded(bool won, string message)
         {

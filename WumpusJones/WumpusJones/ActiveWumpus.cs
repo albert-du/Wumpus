@@ -1,60 +1,48 @@
 ﻿using System;
-using System.Linq;
+using static WumpusJones.WumpusState;
 
 namespace WumpusJones
 {
-    public class ActiveWumpus
+    public class ActiveWumpus : Wumpus
     {
-        public int Room { get; set; }
+        private WumpusState state;
+        private Asleep Sleep => new(Random.Next(5, 11));
+        private Awake Wake => new(Random.Next(1, 4));
+        private Defeated Defeat => new(Random.Next(1, 4), 2);
 
-        private readonly Cave _cave;
-        private readonly Random rnd = new();
-        private bool isAwake;
-        private int lostTrivia;
-        private int turnsRemaining = 5;
+        public ActiveWumpus(Cave cave) : base(cave) =>
+            state = Sleep;
 
-        public ActiveWumpus(Cave cave)
+        public override void ArrowMissed() =>
+            state = Wake;
+
+        public override void TriviaLost() =>
+            state = Defeat;
+
+        public override void WumpusTurn()
         {
-            _cave = cave;
-        }
-
-        private void MoveRandomly(int player)
-        {
-            var validMovements = _cave.RoomAt(Room).Neighbors.Where(x => x > 0 && x != player).ToList();
-            if (validMovements.Count == 0) return;
-            Room = validMovements.ElementAt(rnd.Next(validMovements.Count));
-        }
-
-        public void Turn(int player)
-        {
-            if (rnd.Next(0, 100) < 5)
-            {
-                do
-                    Room = rnd.Next(0, 31);
-                while (Room == player);
-                return;
-            }
+            if (Random.Next(0,100) < 5)
+                Room = Random.Next(0, 31);
             
-            if (lostTrivia > 0)
+            switch (state)
             {
-                lostTrivia--;
-                var amount = rnd.Next(1, 3);
-                for (var i = 0; i < amount; i++)
-                    MoveRandomly(player);
-                return;
+                case (Defeated defeated):
+                    var r = Random.Next(defeated.Speed + 1);
+                    for (var i = 0; i < r; i++)
+                        MoveRandomly();
+                    break;
+                case (Awake):
+                    MoveRandomly();
+                    break;
             }
-            if (isAwake)
-                MoveRandomly(player);
 
-            turnsRemaining--;
-            if (turnsRemaining == 0)
+            state = state switch
             {
-                isAwake = !isAwake;
-                turnsRemaining = isAwake ? rnd.Next(1, 4) : rnd.Next(5, 11);
-            }
+                _ when state.Duration > 1 => state with { Duration = state.Duration - 1 },
+                Asleep or Defeated => Wake,
+                Awake => Sleep,
+                _ => state
+            };
         }
-
-        public void LostTrivia() =>
-            lostTrivia = 3;
     }
 }

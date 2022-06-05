@@ -22,8 +22,7 @@ namespace WumpusJones
 
         private void buttonLeaderboard_Click(object sender, EventArgs e)
         {
-            HighscoreForm highscoreForm = new();
-            highscoreForm.HighScores = Highscores;
+            HighscoreForm highscoreForm = new () { HighScores = Highscores };
             highscoreForm.ShowDialog();
         }
     }

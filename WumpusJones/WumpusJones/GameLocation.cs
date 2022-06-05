@@ -6,43 +6,23 @@ namespace WumpusJones
 {
     public class GameLocation
     {
-        public int PlayerRoom { get; set; }
         public int StartingRoom { get; }
-        public int WumpusRoom 
-        { 
-            get => wumpus.Room;
-            set => wumpus.Room = value; 
-        }
+        public int PlayerRoom { get; set; }
+        public int WumpusRoom { get; set; }
         public int BatRoom1 { get; set; }
         public int BatRoom2 { get; set; }
         public int HoleRoom { get; set; }
 
-        private ActiveWumpus wumpus;
         private Random rnd = new Random();
         private Cave cave;
 
         public GameLocation(Cave cave)
         {
             this.cave = cave;
-            wumpus = new(cave);
             PlayerRoom = rnd.Next(1, 31);
             StartingRoom = PlayerRoom;
             CreateHazards();
         }
-
-        public void MoveWumpus()
-        {
-            var validMovements = cave.RoomAt(WumpusRoom).Neighbors.Where(x => x > 0).ToList();
-            do
-                WumpusRoom = validMovements.ElementAt(rnd.Next(validMovements.Count));
-            while (WumpusRoom == PlayerRoom);
-        }
-
-        public void TriviaLost() =>
-            wumpus.LostTrivia();
-
-        public void WumpusTurn() =>
-            wumpus.Turn(PlayerRoom);
 
         public bool IsWumpusNearby =>
             cave.RoomAt(WumpusRoom).Neighbors
@@ -57,6 +37,20 @@ namespace WumpusJones
             while (room == 0 || room == BatRoom1 || room == BatRoom2 || room == WumpusRoom || room == HoleRoom)
                 room = rnd.Next(1, 31);
             MovePlayer(room);
+        }
+
+        public void RandomizeBat1()
+        {
+            do
+                BatRoom1 = rnd.Next(1, 31);
+            while (BatRoom1 == PlayerRoom || BatRoom2 == BatRoom1 || BatRoom1 == HoleRoom);
+        }
+
+        public void RandomizeBat2()
+        {
+            do
+                BatRoom2 = rnd.Next(1, 31);
+            while (BatRoom2 == PlayerRoom || BatRoom2 == BatRoom1 || BatRoom2 == HoleRoom);
         }
 
         public void CreateHazards()

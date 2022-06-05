@@ -12,8 +12,8 @@ namespace WumpusJones
         }
 
         public string PlayerName { get; private set; }
-        public int Cave =>
-            comboBoxCaveNumber.SelectedIndex + 1;
+        public int Cave => comboBoxCaveNumber.SelectedIndex + 1;
+        public bool ActiveWumpus => checkBoxActive.Checked;
 
         private void buttonStart_Click(object sender, EventArgs e)
         {

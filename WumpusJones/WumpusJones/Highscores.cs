@@ -12,7 +12,7 @@ namespace WumpusJones
 
         public void Add(PlayerScore score)
         {
-            TopScores = TopScores.Where(x => x.Name != score.Name).Append(score).OrderBy(x => x.Score).Take(10);
+            TopScores = TopScores.Where(x => x.Name != score.Name).Append(score).OrderByDescending(x => x.Score).Take(10);
             File.WriteAllLines(path, TopScores.Select(x => JsonSerializer.Serialize(x)));
         }
 
@@ -31,12 +31,12 @@ namespace WumpusJones
             if (defaults)
             {
                 var defaultScores = new[] { 
-                    new PlayerScore("Albert", 100, 0, 0, false),
-                    new PlayerScore("Alex", 100, 0, 0, false),
-                    new PlayerScore("Joshua", 100, 0, 0, false),
-                    new PlayerScore("Marcus", 100, 0, 0, false),
-                    new PlayerScore("Matthew", 100, 0, 0, false),
-                    new PlayerScore("Ralph", 100, 0, 0, false)
+                    new PlayerScore("Albert", 100, 0, 0, false, false),
+                    new PlayerScore("Alex", 100, 0, 0, false, false),
+                    new PlayerScore("Joshua", 100, 0, 0, false, false),
+                    new PlayerScore("Marcus", 100, 0, 0, false, false),
+                    new PlayerScore("Matthew", 100, 0, 0, false, false),
+                    new PlayerScore("Ralph", 100, 0, 0, false, false)
                 };
                 foreach (var score in defaultScores)
                     Add(score);
