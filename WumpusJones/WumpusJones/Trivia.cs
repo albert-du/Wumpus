@@ -9,12 +9,13 @@ namespace WumpusJones
     public class Trivia
     {
         private int ptr;
-        private readonly Random rnd = new();
+        private readonly Random rnd;
 
         private readonly List<Question> questions;
 
-        public Trivia()
+        public Trivia(Random random)
         {
+            rnd = random;
             var assembly = Assembly.GetExecutingAssembly();
             var resourceName = assembly.GetManifestResourceNames().Single(x => x.EndsWith("trivia.txt"));
             using var stream = assembly.GetManifestResourceStream(resourceName);

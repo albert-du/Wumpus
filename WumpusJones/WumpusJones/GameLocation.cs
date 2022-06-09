@@ -13,11 +13,12 @@ namespace WumpusJones
         public int BatRoom2 { get; set; }
         public int HoleRoom { get; set; }
 
-        private readonly Random rnd = new();
+        private readonly Random rnd;
         private readonly IReadOnlyList<Room> cave;
 
-        public GameLocation(IReadOnlyList<Room> cave)
+        public GameLocation(IReadOnlyList<Room> cave, Random random)
         {
+            rnd = random;
             this.cave = cave;
             PlayerRoom = rnd.Next(1, 31);
             StartingRoom = PlayerRoom;

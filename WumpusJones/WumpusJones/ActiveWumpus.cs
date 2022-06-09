@@ -11,7 +11,7 @@ namespace WumpusJones
         private Awake Wake => new(Random.Next(1, 4));
         private Defeated Defeat => new(Random.Next(1, 4), 2);
 
-        public ActiveWumpus(IReadOnlyList<Room> cave) : base(cave) =>
+        public ActiveWumpus(IReadOnlyList<Room> cave, Random random) : base(cave, random) =>
             state = Sleep;
 
         public override void ArrowMissed() =>

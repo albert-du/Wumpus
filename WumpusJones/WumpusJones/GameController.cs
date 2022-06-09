@@ -9,33 +9,34 @@ namespace WumpusJones
         private readonly Action<string, TriviaType, Action<bool>> _trivia;
         private readonly string _name;
         private readonly bool _activeWumpus;
-        private readonly Trivia _triviaSource;
-        private readonly Random rnd = new();
+        private readonly Random rnd;
         private readonly Wumpus wumpus;
         public Cave Cave { get; }
         public Player Player { get; }
         public GameLocation GameLocation { get; }
         public Highscores Highscores { get; } = new();
+        public Trivia Trivia { get; }
         public Room PlayerLocation => Cave.RoomAt(GameLocation.PlayerRoom);
         public PlayerScore GetScore(bool won) => new(_name, Player.Turns, Player.Coins, Player.Arrows, won, _activeWumpus);
 
-        public GameController(string name, int caveNumber, Action<string, TriviaType, Action<bool>> trivia, Trivia triviaSource, bool activeWumpus)
+        public GameController(string name, int caveNumber, Action<string, TriviaType, Action<bool>> trivia, bool activeWumpus, int? seed = null)
         {
+            rnd = new(seed ?? Environment.TickCount);
             Player = new();
             Cave = new(caveNumber);
-            GameLocation = new(Cave.Rooms);
-            wumpus = activeWumpus ?  new ActiveWumpus(Cave.Rooms) : new Wumpus(Cave.Rooms);
+            GameLocation = new(Cave.Rooms, new Random(rnd.Next()));
+            Trivia = new(new Random(rnd.Next()));
+            wumpus = activeWumpus ?  new ActiveWumpus(Cave.Rooms, new Random(rnd.Next())) : new Wumpus(Cave.Rooms, new Random(rnd.Next()));
             wumpus.Room = rnd.Next(1, 31);
             _name = name;
             _activeWumpus = activeWumpus;
             _trivia = trivia;
-            _triviaSource = triviaSource;
         }
 
         public void Move(int room)
         {
             Player.Turn();
-            TextChanged(_triviaSource.GetRandomTrivia(), false);
+            TextChanged(Trivia.GetRandomTrivia(), false);
             TextChanged(GameLocation.MovePlayer(room));
             MoveImpl(room);
             Player.IncrementCoin();
@@ -148,7 +149,7 @@ namespace WumpusJones
             2 => $"Boulder at {GameLocation.WumpusRoom}",
             3 => $"Boulder is {(GameLocation.IsWumpusNearby ? string.Empty : "not")} nearby",
             4 => $"You're at {GameLocation.PlayerRoom}",
-            _ => $"{_triviaSource.GetAlreadyAskedQuestion()}"
+            _ => $"{Trivia.GetAlreadyAskedQuestion()}"
         };
 
         public void BuySecret()

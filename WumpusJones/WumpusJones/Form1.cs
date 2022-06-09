@@ -20,7 +20,6 @@ namespace WumpusJones
 
         private readonly Trivia _trivaSource;
         private readonly GameController _gameController;
-        private readonly Random rnd = new();
 
         public Form1(string playerName, int cave, bool activeWumpus)
         {
@@ -44,9 +43,8 @@ namespace WumpusJones
             label1.Font = Program.CustomFont;
 
             // Game Init
-            _trivaSource = new();
-            _gameController = new(playerName, cave, Trivia, _trivaSource, activeWumpus);
-            triviaControl1.Trivia = _trivaSource;
+            _gameController = new(playerName, cave, Trivia, activeWumpus);
+            triviaControl1.Trivia = _gameController.Trivia;
             mapControl1.Cave = _gameController.Cave;
             mapControl1.GameLocations = _gameController.GameLocation;
             OnStatsChanged(this, new EventArgs());
