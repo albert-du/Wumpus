@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using static WumpusJones.WumpusState;
 
 namespace WumpusJones
@@ -10,7 +11,7 @@ namespace WumpusJones
         private Awake Wake => new(Random.Next(1, 4));
         private Defeated Defeat => new(Random.Next(1, 4), 2);
 
-        public ActiveWumpus(Cave cave) : base(cave) =>
+        public ActiveWumpus(IReadOnlyList<Room> cave) : base(cave) =>
             state = Sleep;
 
         public override void ArrowMissed() =>

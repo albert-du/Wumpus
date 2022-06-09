@@ -13,10 +13,10 @@ namespace WumpusJones
         public int BatRoom2 { get; set; }
         public int HoleRoom { get; set; }
 
-        private Random rnd = new Random();
-        private Cave cave;
+        private readonly Random rnd = new();
+        private readonly IReadOnlyList<Room> cave;
 
-        public GameLocation(Cave cave)
+        public GameLocation(IReadOnlyList<Room> cave)
         {
             this.cave = cave;
             PlayerRoom = rnd.Next(1, 31);
@@ -25,9 +25,9 @@ namespace WumpusJones
         }
 
         public bool IsWumpusNearby =>
-            cave.RoomAt(WumpusRoom).Neighbors
+            cave[WumpusRoom - 1].Neighbors
                 .Where(x => x > 0)
-                .Any(x => cave.RoomAt(x).Neighbors
+                .Any(x => cave[x - 1].Neighbors
                           .Where(x => x > 0)
                           .Any(x => x == PlayerRoom));
 
@@ -71,8 +71,7 @@ namespace WumpusJones
         public string MovePlayer(int room)
         {
             PlayerRoom = room;
-            cave.ExploredRoom(PlayerRoom);
-            var neighbors = cave.RoomAt(room).Neighbors;
+            var neighbors = cave[room - 1].Neighbors;
             string value = "";
             foreach (var r1 in neighbors)
             {
