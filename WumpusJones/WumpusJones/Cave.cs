@@ -7,10 +7,10 @@ namespace WumpusJones
 {
     public class Cave
     {
-        private readonly Room[] rooms;
+        public Room[] Rooms { get; }
         public List<int> Explored { get; } = new();
 
-        public Room RoomAt(int roomNumber) => rooms[roomNumber - 1];
+        public Room RoomAt(int roomNumber) => Rooms[roomNumber - 1];
 
         public Cave(int map)
         {
@@ -19,7 +19,7 @@ namespace WumpusJones
             using var stream = assembly.GetManifestResourceStream(resourceName);
             using StreamReader reader = new(stream);
 
-            rooms = reader.ReadToEnd()
+            Rooms = reader.ReadToEnd()
                           .Split('\n')
                           .Select(x => new Room(x.Split(',').Select(int.Parse).ToArray()))
                           .ToArray();
@@ -27,7 +27,7 @@ namespace WumpusJones
             resourceName = assembly.GetManifestResourceNames().Single(x => x.EndsWith($"Cave{map}.dat"));
             using var stream2 = assembly.GetManifestResourceStream(resourceName);
             using StreamReader reader2 = new(stream2);
-            foreach (var room in rooms)
+            foreach (var room in Rooms)
                 room.Parse(reader2.ReadLine());
         }
 

@@ -23,8 +23,8 @@ namespace WumpusJones
         {
             Player = new();
             Cave = new(caveNumber);
-            GameLocation = new(Cave);
-            wumpus = activeWumpus ?  new ActiveWumpus(Cave) : new Wumpus(Cave);
+            GameLocation = new(Cave.Rooms);
+            wumpus = activeWumpus ?  new ActiveWumpus(Cave.Rooms) : new Wumpus(Cave.Rooms);
             wumpus.Room = rnd.Next(1, 31);
             _name = name;
             _activeWumpus = activeWumpus;
@@ -44,6 +44,7 @@ namespace WumpusJones
 
         private void MoveImpl(int room)
         {
+            Cave.ExploredRoom(GameLocation.PlayerRoom);
             // I wouldn't touch this.
             void callback1()
             {

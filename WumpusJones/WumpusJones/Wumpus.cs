@@ -10,12 +10,12 @@ namespace WumpusJones
 
         public int Room { get; set; }
         
-        protected Cave Cave { get; private set; }
+        protected IReadOnlyList<Room> Cave { get; private set; }
         protected Random Random { get; } = new();
         protected IReadOnlyList<int> Travelable =>
-            Cave.RoomAt(Room).Neighbors.Where(x => x > 0).ToList();
+            Cave[Room - 1].Neighbors.Where(x => x > 0).ToList();
 
-        public Wumpus(Cave cave) =>
+        public Wumpus(IReadOnlyList<Room> cave) =>
             Cave = cave;
 
         protected void MoveRandomly() =>
